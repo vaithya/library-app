@@ -1,0 +1,430 @@
+ATH032926:library-app nvaithyanathan$ npm run coverage
+
+> library-app@0.0.1 coverage /Users/nvaithyanathan/Desktop/Node/library-application/library-app
+> jest --coverage --runInBand --forceExit --testResultsProcessor @athena/app-fabric-coverage-jest --coverageReporters text
+
+sequelize deprecated String based operators are now deprecated. Please use Symbol based operators for better security, read more at http://docs.sequelizejs.com/manual/tutorial/querying.html#operators node_modules/sequelize/lib/sequelize.js:242:13
+{
+  "level": "info",
+  "message": "Connecting to test database.",
+  "timestamp": "2018-05-28T09:14:26.742Z"
+}
+  console.log models/book.js:42
+    Check what changed instead of updating all the fields passed in.
+
+  console.log models/book.js:42
+    Check what changed instead of updating all the fields passed in.
+
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.025Z"
+}
+  console.log logic/book.js:19
+    {
+      "name": "Book 56",
+      "author": "vaithy",
+      "edition": "5",
+      "shelfNumber": "5",
+      "publishedDate": "12/02/2018"
+    }
+
+  console.log models/book.js:42
+    Check what changed instead of updating all the fields passed in.
+
+{
+  "message": "Test Error",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.112Z"
+}
+{
+  "message": "Name of the book cannot be empty and should be a string.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.115Z"
+}
+{
+  "message": "Name of the book cannot be empty and should be a string.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.117Z"
+}
+{
+  "message": "Author of the book cannot be empty and should be a string.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.120Z"
+}
+{
+  "message": "Author of the book cannot be empty and should be a string.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.122Z"
+}
+{
+  "message": "Shelf number of the book cannot be empty and should be a string.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.125Z"
+}
+{
+  "message": "Shelf number of the book cannot be empty and should be a string.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.127Z"
+}
+{
+  "message": "Name of the book has to contain between 6 and 20 characters and it cannot contain special characters.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.130Z"
+}
+{
+  "message": "Published date of the book is not valid.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.133Z"
+}
+{
+  "message": "Edition number of the book is not valid. It has to be a number.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.135Z"
+}
+ PASS  tests/book-apis.test.js
+  ✓ Add a book to the library, Book parameters validation (124ms)
+  ✓ Get book APIs (22ms)
+
+sequelize deprecated String based operators are now deprecated. Please use Symbol based operators for better security, read more at http://docs.sequelizejs.com/manual/tutorial/querying.html#operators node_modules/sequelize/lib/sequelize.js:242:13
+{
+  "level": "info",
+  "message": "{\"result\":\"This book has been added to our library.\"}",
+  "timestamp": "2018-05-28T09:14:27.088Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.099Z"
+}
+  console.log logic/book.js:19
+    {
+      "name": "Book 56",
+      "author": "vaithy",
+      "edition": "5",
+      "shelfNumber": "5",
+      "publishedDate": "12/02/2018"
+    }
+
+  console.log models/book.js:42
+    Check what changed instead of updating all the fields passed in.
+
+{
+  "level": "info",
+  "message": "{\"result\":\"This book has been added to our library.\"}",
+  "timestamp": "2018-05-28T09:14:27.105Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.109Z"
+}
+  console.log logic/book.js:19
+    {
+      "name": "Book 56",
+      "author": "vaithy",
+      "edition": "5",
+      "shelfNumber": "5",
+      "publishedDate": "12/02/2018"
+    }
+
+{
+  "level": "info",
+  "message": "{\"result\":\"Unable to create books at the moment.\",\"error\":\"Error: Test Error\"}",
+  "timestamp": "2018-05-28T09:14:27.112Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.114Z"
+}
+  console.log logic/book.js:19
+    {
+      "author": "vaithy",
+      "edition": "5",
+      "shelfNumber": "5",
+      "publishedDate": "12/02/2018"
+    }
+
+{
+  "level": "info",
+  "message": "{\"result\":\"Unable to process your request.\",\"error\":\"Error: Name of the book cannot be empty and should be a string.\"}",
+  "timestamp": "2018-05-28T09:14:27.115Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.117Z"
+}
+  console.log logic/book.js:19
+    {
+      "name": 123,
+      "author": 123,
+      "edition": "5",
+      "shelfNumber": "5",
+      "publishedDate": "12/02/2018"
+    }
+
+{
+  "level": "info",
+  "message": "{\"result\":\"Unable to process your request.\",\"error\":\"Error: Name of the book cannot be empty and should be a string.\"}",
+  "timestamp": "2018-05-28T09:14:27.117Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.119Z"
+}
+  console.log logic/book.js:19
+    {
+      "name": "new book",
+      "author": 123,
+      "edition": "5",
+      "shelfNumber": "5",
+      "publishedDate": "12/02/2018"
+    }
+
+{
+  "level": "info",
+  "message": "{\"result\":\"Unable to process your request.\",\"error\":\"Error: Author of the book cannot be empty and should be a string.\"}",
+  "timestamp": "2018-05-28T09:14:27.120Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.122Z"
+}
+  console.log logic/book.js:19
+    {
+      "name": "new book",
+      "edition": "5",
+      "shelfNumber": "5",
+      "publishedDate": "12/02/2018"
+    }
+
+{
+  "level": "info",
+  "message": "{\"result\":\"Unable to process your request.\",\"error\":\"Error: Author of the book cannot be empty and should be a string.\"}",
+  "timestamp": "2018-05-28T09:14:27.122Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.125Z"
+}
+  console.log logic/book.js:19
+    {
+      "name": "new book",
+      "author": "vaithy",
+      "edition": "5",
+      "publishedDate": "12/02/2018"
+    }
+
+{
+  "level": "info",
+  "message": "{\"result\":\"Unable to process your request.\",\"error\":\"Error: Shelf number of the book cannot be empty and should be a string.\"}",
+  "timestamp": "2018-05-28T09:14:27.125Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.127Z"
+}
+  console.log logic/book.js:19
+    {
+      "name": "new book",
+      "author": "vaithy",
+      "edition": "5",
+      "publishedDate": "12/02/2018",
+      "shelfNumber": 5
+    }
+
+{
+  "level": "info",
+  "message": "{\"result\":\"Unable to process your request.\",\"error\":\"Error: Shelf number of the book cannot be empty and should be a string.\"}",
+  "timestamp": "2018-05-28T09:14:27.128Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.129Z"
+}
+  console.log logic/book.js:19
+    {
+      "name": "new",
+      "author": "vaithy",
+      "edition": "5",
+      "publishedDate": "12/02/2018",
+      "shelfNumber": "5"
+    }
+
+{
+  "level": "info",
+  "message": "{\"result\":\"Unable to process your request.\",\"error\":\"Error: Name of the book has to contain between 6 and 20 characters and it cannot contain special characters.\"}",
+  "timestamp": "2018-05-28T09:14:27.131Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.133Z"
+}
+  console.log logic/book.js:19
+    {
+      "name": "new book",
+      "author": "vaithy",
+      "edition": "5",
+      "publishedDate": "12",
+      "shelfNumber": "5"
+    }
+
+{
+  "level": "info",
+  "message": "{\"result\":\"Unable to process your request.\",\"error\":\"Error: Published date of the book is not valid.\"}",
+  "timestamp": "2018-05-28T09:14:27.133Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.135Z"
+}
+  console.log logic/book.js:19
+    {
+      "name": "new book",
+      "author": "vaithy",
+      "edition": 5,
+      "publishedDate": "12/02/2018",
+      "shelfNumber": "5"
+    }
+
+{
+  "level": "info",
+  "message": "{\"result\":\"Unable to process your request.\",\"error\":\"Error: Edition number of the book is not valid. It has to be a number.\"}",
+  "timestamp": "2018-05-28T09:14:27.135Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.138Z"
+}
+{
+  "level": "info",
+  "message": "[{\"id\":281,\"name\":\"book11\",\"author\":\"vaithy\",\"publishedDate\":\"2017-12-01T18:30:00.000Z\",\"edition\":\"5\",\"shelfNumber\":\"5\",\"deleted\":false,\"noOfBooksAvailable\":1,\"createdAt\":\"2018-05-28T09:14:26.985Z\",\"updatedAt\":\"2018-05-28T09:14:26.985Z\"},{\"id\":282,\"name\":\"book22\",\"author\":\"vaithy\",\"publishedDate\":\"2017-12-01T18:30:00.000Z\",\"edition\":\"5\",\"shelfNumber\":\"5\",\"deleted\":false,\"noOfBooksAvailable\":1,\"createdAt\":\"2018-05-28T09:14:27.004Z\",\"updatedAt\":\"2018-05-28T09:14:27.004Z\"},{\"id\":283,\"name\":\"Book 56\",\"author\":\"vaithy\",\"publishedDate\":\"2018-12-01T18:30:00.000Z\",\"edition\":\"5\",\"shelfNumber\":\"5\",\"deleted\":false,\"noOfBooksAvailable\":2,\"createdAt\":\"2018-05-28T09:14:27.075Z\",\"updatedAt\":\"2018-05-28T09:14:27.101Z\"}]",
+  "timestamp": "2018-05-28T09:14:27.140Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.144Z"
+}
+{
+  "level": "info",
+  "message": "{\"id\":281,\"name\":\"book11\",\"author\":\"vaithy\",\"publishedDate\":\"2017-12-01T18:30:00.000Z\",\"edition\":\"5\",\"shelfNumber\":\"5\",\"deleted\":false,\"noOfBooksAvailable\":1,\"createdAt\":\"2018-05-28T09:14:26.985Z\",\"updatedAt\":\"2018-05-28T09:14:26.985Z\"}",
+  "timestamp": "2018-05-28T09:14:27.146Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.148Z"
+}
+{
+  "level": "info",
+  "message": "{\"result\":\"The requested book is not available now.\"}",
+  "timestamp": "2018-05-28T09:14:27.150Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.152Z"
+}
+{
+  "level": "info",
+  "message": "{\"availability\":false}",
+  "timestamp": "2018-05-28T09:14:27.154Z"
+}
+{
+  "level": "info",
+  "message": "Incoming request.",
+  "timestamp": "2018-05-28T09:14:27.156Z"
+}
+{
+  "level": "info",
+  "message": "{\"availability\":true}",
+  "timestamp": "2018-05-28T09:14:27.158Z"
+}
+{
+  "level": "info",
+  "message": "Connecting to test database.",
+  "timestamp": "2018-05-28T09:14:27.283Z"
+}
+{
+  "message": "Username cannot be empty and it should be a string containing atleast one character.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.411Z"
+}
+{
+  "message": "Username cannot be empty and it should be a string containing atleast one character.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.414Z"
+}
+{
+  "message": "Username cannot be empty and it should be a string containing atleast one character.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.416Z"
+}
+{
+  "message": "Username should be between 6-12 characters/digits. Cannot contain special characters. Should be a string.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.419Z"
+}
+{
+  "message": "Contact number should be a string.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.421Z"
+}
+{
+  "message": "Contact number can contain only numbers.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.423Z"
+}
+{
+  "message": "Unable to fetch data from db.",
+  "level": "error",
+  "timestamp": "2018-05-28T09:14:27.431Z"
+}
+ PASS  tests/member-apis.test.js
+  ✓ Register a member (38ms)
+  ✓ Unregister a member (20ms)
+
+Test Suites: 2 passed, 2 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        4.601s, estimated 7s
+Ran all test suites.
+----------------------------|----------|----------|----------|----------|-------------------|
+File                        |  % Stmts | % Branch |  % Funcs |  % Lines | Uncovered Line #s |
+----------------------------|----------|----------|----------|----------|-------------------|
+All files                   |    70.39 |    60.25 |    78.81 |       71 |                   |
+ library-app                |      100 |       75 |      100 |      100 |                   |
+  logger.js                 |      100 |       75 |      100 |      100 |                 1 |
+ library-app/controllers    |     82.5 |    83.33 |    73.91 |      100 |                   |
+  bookController.js         |    82.69 |    83.33 |    68.75 |      100 |                 3 |
+  memberController.js       |    82.14 |    83.33 |    85.71 |      100 |                 3 |
+ library-app/db             |       84 |      100 |       75 |      100 |                   |
+  db.js                     |       84 |      100 |       75 |      100 |                   |
+ library-app/logic          |    61.52 |    46.43 |    77.14 |    54.84 |                   |
+  book.js                   |    51.88 |    37.21 |    73.47 |    45.45 |... 01,409,415,421 |
+  member.js                 |       90 |    76.92 |    85.71 |       92 |             91,97 |
+ library-app/middleware     |    90.48 |    83.33 |      100 |      100 |                   |
+  handlers.js               |    90.48 |    83.33 |      100 |      100 |                 1 |
+ library-app/models         |      100 |     87.5 |      100 |      100 |                   |
+  book.js                   |      100 |      100 |      100 |      100 |                   |
+  member.js                 |      100 |       75 |      100 |      100 |                 1 |
+ library-app/server         |    84.62 |       50 |       50 |    83.33 |                   |
+  server.js                 |    84.62 |       50 |       50 |    83.33 |             23,25 |
+ library-app/tests/testdata |      100 |      100 |      100 |      100 |                   |
+  populateDb.js             |      100 |      100 |      100 |      100 |                   |
+ library-app/utils          |      100 |    97.37 |      100 |      100 |                   |
+  util.js                   |      100 |    97.37 |      100 |      100 |                 1 |
+----------------------------|----------|----------|----------|----------|-------------------|
+ATH032926:library-app nvaithyanathan$ 
+
