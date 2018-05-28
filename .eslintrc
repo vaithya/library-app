@@ -1,0 +1,32 @@
+{
+	"extends": "@athena/eslint-config-app-fabric",
+	"rules": {
+		"indent": ["error", "tab"],
+		"no-tabs": "off",
+		"linebreak-style": "warn",
+		"max-params": ["error", 4],
+		"new-cap": ["warn", {"newIsCapExceptions": ["moment"], "capIsNewExceptions": [
+			"Router",
+			"Sequelize.STRING",
+			"Sequelize.DATE",
+			"Sequelize.INTEGER",
+			"Sequelize.ARRAY",
+			"Sequelize.ENUM",
+		]}]
+	},
+	"env": {
+		"browser": true,
+		"node": true,
+		"es6": true
+	},
+	"parserOptions": {
+		"sourceType": "module",
+		"ecmaVersion": 2017,
+		"ecmaFeatures": {
+			"jsx": true,
+			"generators": true,
+			"experimentalObjectRestSpread": true
+		}
+	},
+	"plugins": [ "react" ]
+}
