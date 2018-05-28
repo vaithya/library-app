@@ -36,7 +36,7 @@ export const requestHandler = async (req, res, requestHandlerFunction) => {
             jsonToReturn.error = result.error.toString();
         }
     }
-    console.log('JSON: ', JSON.stringify(jsonToReturn))
+    logger.info(JSON.stringify(jsonToReturn));
     res.status(result.status).json(jsonToReturn);
 
 }

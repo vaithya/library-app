@@ -233,18 +233,3 @@ test('Get book APIs', async () => {
                 expect(res.body.availability).toBe(true);
             });
 });
-
-// test('Update book API', async () => {
-
-//     const bookToUpdate = await db.book.findOne({
-//         where: {
-//             deleted: { [Sequelize.Op.ne]: true }
-//         }
-//     });
-
-//     await request(app)
-//             .patch(`/api/books/${bookToUpdate.id}`)
-//             .send({
-//                 name: "updatedbook"
-//             })
-// });
