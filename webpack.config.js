@@ -3,9 +3,7 @@ const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 
 let commonExtensions = ['.js'];
-let commonEntries = [
-	'babel-polyfill'
-];
+
 let commonRules = [
 	{
 		test: /\.js?$/,
@@ -26,14 +24,15 @@ module.exports = [
 		context: __dirname + "/server",
 		node: {
 			// dont inject __dirname, leave it as global.__dirname
+			// dirname is set to / by webpack.
 			__dirname: false
 		},
-		entry: commonEntries.concat(['./server.js']),
+		entry: ['./server.js'], // with respect to the context
 		output: {
 			path: __dirname + "/dist",
 			filename: "server.js"
 		},
 		externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
-		resolve: { extensions: commonExtensions }
+		resolve: { extensions: commonExtensions } // to leave off extensions while importing in our files.
 	}
 ];

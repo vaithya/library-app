@@ -184,7 +184,7 @@ class Book {
 
         if (!existingMember) {
             return {
-                status: HttpStatus.FORBIDDEN,
+                status: HttpStatus.UNAUTHORIZED,
                 result: `You must be a registered member to borrow this book. Please register first.`
             }
         }
@@ -279,7 +279,7 @@ class Book {
             
             if (!existingMember) {
                 return {
-                    status: HttpStatus.FORBIDDEN,
+                    status: HttpStatus.UNAUTHORIZED,
                     result: `You must be a registered member to return a book. Please register first.`
                 }
             }
@@ -288,6 +288,13 @@ class Book {
                 return {
                     status: HttpStatus.BAD_REQUEST,
                     result: 'We did not lend you this book. Please check.'
+                }
+            }
+
+            if (existingMember.noOfBooksTaken === 0) {
+                return {
+                    status: HttpStatus.BAD_REQUEST,
+                    result: 'You\'ve returned all your books already. Please check.'
                 }
             }
 
