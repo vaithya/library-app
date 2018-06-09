@@ -4,6 +4,7 @@ import logger from '../logger.js';
 import { db } from '../db/db.js'
 import { bookRouter } from '../controllers/bookController.js';
 import { memberRouter } from '../controllers/memberController.js';
+import { bookTransactionsRouter } from '../controllers/bookTransactionsController.js';
 
 const app = express();
 const port = 8080;
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 
 app.use('/api', bookRouter());
 app.use('/api', memberRouter());
+app.use('/api', bookTransactionsRouter());
 
 if (process.env.NODE_ENV !== 'test') {
 

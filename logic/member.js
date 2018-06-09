@@ -2,7 +2,7 @@ import Sequelize from 'sequelize';
 import { db } from '../db/db.js';
 import logger from '../logger.js';
 import HttpStatus from 'http-status-codes';
-import { validateMember } from '../utils/util.js';
+import { validateMember } from '../validators/memberValidator.js';
 
 export default class Member {
 
@@ -12,7 +12,7 @@ export default class Member {
         let createdUser;
         let existingMember;
 
-        validateMember(username, contactNumber);
+        validateMember({ username, contactNumber });
 
         try {
 

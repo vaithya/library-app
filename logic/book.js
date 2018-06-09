@@ -2,26 +2,25 @@ import Sequelize from 'sequelize';
 import { db } from '../db/db.js';
 import logger from '../logger.js';
 import HttpStatus from 'http-status-codes';
-import { validateBook } from '../utils/util.js';
+import { validateBook } from '../validators/bookValidator.js';
+import { bookProperties } from '../constants/bookProperties.js';
 
 class Book {
 
     constructor () {
         // Need 'this' to be defined to access checkBookAvailability within borrowBook.
         // All methods were static previously, but 'this' was undefined inside those methods when the methods were passed as arguments to the handler.
-
-        this.borrowBook = this.borrowBook.bind(this);
         this.checkBookAvailability = this.checkBookAvailability.bind(this);
         this.getBookAvailability = this.getBookAvailability.bind(this);
     }
 
     async addBook (req) {
-        console.log(JSON.stringify(req.body,0,2));
-        const { name = '', author = '', edition = '', publishedDate = '', shelfNumber = '' } = req.body;
+
+        const bookToAdd = req.body;
         let createdBook;
         let existingBook;
         
-        validateBook(name, author, edition, publishedDate, shelfNumber);
+        validateBook(bookToAdd, { operation: 'add' });
 
         try {
 
@@ -35,15 +34,7 @@ class Book {
             });
 
             if (existingBook.length === 0) {
-                createdBook = await db.book.create({
-                    name,
-                    author,
-                    edition,
-                    shelfNumber,
-                    publishedDate,
-                    noOfBooksAvailable: 1
-                });
-
+                createdBook = await db.book.create(Object.assign(bookToAdd, { noOfBooksAvailable: 1 }));
             }
             else {
 
@@ -170,175 +161,27 @@ class Book {
         }
     }
 
-    async borrowBook (req) {
+    async updateBook (req) {
 
-        const bookId = req.body.bookId;
-        const memberId = req.body.memberId;
-       
-        const existingMember = await db.member.findOne({
-            where: {
-                id: memberId,
-                unRegisteredYN: { [Sequelize.Op.eq]: false }
-            }
-        });
+        let propertiesToUpdate = {};
 
-        if (!existingMember) {
-            return {
-                status: HttpStatus.UNAUTHORIZED,
-                result: `You must be a registered member to borrow this book. Please register first.`
+        for (const key of Object.keys(req.body)) {
+            if (bookProperties[key]) {
+                propertiesToUpdate[key] = req.body[key];
             }
         }
 
-        if (existingMember.amountDue > 0) {
-            return {
-                status: HttpStatus.FORBIDDEN,
-                result: `Please pay your due amount ${existingMember.amountDue} to borrow this book.`
-            }
-        }
-       
-        const bookAvailability = await this.checkBookAvailability(bookId);
-        
-        if (bookAvailability === true) {
+        const propertyKeys = Object.keys(propertiesToUpdate);
 
-            try {
-
-                const book = await db.book.findOne({
-                    where: {
-                        id: bookId,
-                        deleted: { [Sequelize.Op.ne]: true }
-                    }
-                });
-
-                await db.book.update({
-                    noOfBooksAvailable: book.noOfBooksAvailable - 1
-                }, {
-                    where: {
-                        id: bookId
-                    }
-                });
-
-                await db.member.update({
-                    noOfBooksTaken: existingMember.noOfBooksTaken + 1
-                }, {
-                    where: {
-                        id: memberId
-                    }
-                });
-
-                return {
-                    status: HttpStatus.OK,
-                    result: 'One copy of the requested book has been lent to you.'
-                }
-
-            }
-            catch (error) {
-
-                logger.error(error);
-                return {
-                    status: HttpStatus.INTERNAL_SERVER_ERROR,
-                    result: 'Unable to lend this book at the moment due to technical issues.',
-                    error
-                }
-
-            }
-        }
-        else if (bookAvailability === false) {
-            return {
-                status: HttpStatus.OK,
-                result: 'This book is not available at the moment.'
-            }
+        if (propertyKeys.length > 0) {
+            validateBook(propertiesToUpdate, { operation: 'update' });
         }
         else {
             return {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                result: 'Unable to lend this book at the moment due to technical issues.'
+                status: HttpStatus.BAD_REQUEST,
+                result: 'Received no properties to update.'
             }
         }
-    }
-
-    async returnBook (req) {
-
-        const bookId = req.body.bookId;
-        const memberId = req.body.memberId;
-
-        try {
-
-            const book = await db.book.findOne({
-                where: {
-                    id: bookId,
-                    deleted: { [Sequelize.Op.ne]: true }
-                }
-            });
-
-            const existingMember = await db.member.findOne({
-                where: {
-                    id: memberId,
-                    unRegisteredYN: { [Sequelize.Op.ne]: true }
-                }
-            });
-            
-            if (!existingMember) {
-                return {
-                    status: HttpStatus.UNAUTHORIZED,
-                    result: `You must be a registered member to return a book. Please register first.`
-                }
-            }
-
-            if (!book) {
-                return {
-                    status: HttpStatus.BAD_REQUEST,
-                    result: 'We did not lend you this book. Please check.'
-                }
-            }
-
-            if (existingMember.noOfBooksTaken === 0) {
-                return {
-                    status: HttpStatus.BAD_REQUEST,
-                    result: 'You\'ve returned all your books already. Please check.'
-                }
-            }
-
-            await db.book.update({
-                noOfBooksAvailable: book.noOfBooksAvailable + 1
-            }, {
-                where: {
-                    id: bookId
-                }
-            });
-
-            await db.member.update({
-                noOfBooksTaken: existingMember.noOfBooksTaken - 1
-            }, {
-                where: {
-                    id: memberId
-                }
-            });
-
-            return {
-                status: HttpStatus.OK,
-                result: 'The return of your book has been accepted.'
-            }
-
-        }
-        catch (error) {
-
-            logger.error(error);
-            return {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                result: 'Unable to accept this book at the moment due to technical issues.',
-                error
-            }
-
-        }
-    }
-
-    async updateBook (req) {
-
-        const { name = '', author = '', publishedDate = '', edition = '', shelfNumber = '' } = req.body;
-        // Instead of updating all the values, find the diff and update that alone.
-        let updatedBook;
-
-        validateBook(name, author, edition, publishedDate, shelfNumber);
 
         try {
 
@@ -357,17 +200,7 @@ class Book {
                 }
             }
 
-           let updates = {};
-
-           // BUG: This overwrites all fields as '' if you don't pass in anything.
-
-            await db.book.update({
-                name,
-                author,
-                edition,
-                shelfNumber,
-                publishedDate
-            }, {
+            await db.book.update(propertiesToUpdate, {
                 where: {
                     id: req.params.id
                 }
