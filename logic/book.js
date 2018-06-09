@@ -27,9 +27,7 @@ class Book {
             existingBook = await db.book.findAll({
                 where: {
                     deleted: { [Sequelize.Op.ne]: true },
-                    name,
-                    author,
-                    edition
+                    ...bookToAdd
                 }
             });
 

@@ -31,7 +31,7 @@ const validateShelfNumber = (shelfNumber) => {
 }
 
 const validatePublishedDate = (publishedDate) => {
-    if(publishedDate && !publishedDate.match(/[0-9]{2}\/[0-9]{2}\/[1,2][7,8,9,0][0-9]{2}/)) {
+    if(publishedDate && !publishedDate.match(/[1,2][7,8,9,0][0-9]{2}-[0-9]{2}-[0-9]{2}/)) {
         return 'Published date of the book is not valid. ';
     }
     else {

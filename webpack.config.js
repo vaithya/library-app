@@ -2,21 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 
-let commonExtensions = ['.js'];
-
-let commonRules = [
-	{
-		test: /\.js?$/,
-		exclude: /node_modules/,
-		use: [{
-			loader: 'babel-loader',
-			options: {
-				presets: ['env']
-			}
-		}]
-	}
-];
-
 module.exports = [
 	{
 		name: 'server',
@@ -27,12 +12,27 @@ module.exports = [
 			// dirname is set to / by webpack.
 			__dirname: false
 		},
-		entry: ['./server.js'], // with respect to the context
+		entry: ['babel-polyfill', './server.js'], // with respect to the context
 		output: {
 			path: __dirname + "/dist",
 			filename: "server.js"
 		},
 		externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
-		resolve: { extensions: commonExtensions } // to leave off extensions while importing in our files.
+		resolve: { extensions: ['.js'] }, // to leave off extensions while importing in our files.
+		module: {
+			rules: [
+				{
+					test: /\.js?$/,
+					exclude: /node_modules/,
+					use: [{
+						loader: 'babel-loader',
+						options: {
+							presets: ['env'],
+							plugins: ['transform-object-rest-spread']
+						}
+					}]
+				}
+			]
+		}
 	}
 ];

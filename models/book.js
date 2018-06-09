@@ -36,16 +36,5 @@ export default (sequelizeInstance) => sequelizeInstance.define('book', {
         type: Sequelize.INTEGER,
         notNull: true
     }
-}, {
-    hooks: {
-        beforeValidate: function (bookInstance) {
-            console.log('Check what changed instead of updating all the fields passed in.');
-            // console.log(bookInstance.changed());
-            if (1) {
-                // console.log('Skipping update because nothing has changed.');
-                return true;
-            }
-        }
-    }
 });
 
