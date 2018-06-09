@@ -6,200 +6,193 @@ import BookFunctions from '../logic/book.js';
 
 class BookTransactions {
 
-    constructor () {
-        this.borrowBook = this.borrowBook.bind(this);
-        this.returnBook = this.returnBook.bind(this);
-        this.handleBookTransactions = this.handleBookTransactions.bind(this);
-    }
+	constructor () {
+		this.borrowBook = this.borrowBook.bind(this);
+		this.returnBook = this.returnBook.bind(this);
+		this.handleBookTransactions = this.handleBookTransactions.bind(this);
+	}
 
-    async borrowBook (req) {
+	async borrowBook (req) {
 
-        const bookId = req.params.bookId;
-        const memberId = req.params.memberId;
-    
-        const existingMember = await db.member.findOne({
-            where: {
-                id: memberId,
-                unRegisteredYN: { [Sequelize.Op.eq]: false }
-            }
-        });
+		const bookId = req.params.bookId;
+		const memberId = req.params.memberId;
 
-        if (!existingMember) {
-            return {
-                status: HttpStatus.UNAUTHORIZED,
-                result: `You must be a registered member to borrow this book. Please register first.`
-            }
-        }
+		const existingMember = await db.member.findOne({
+			where: {
+				id: memberId,
+				unRegisteredYN: { [Sequelize.Op.eq]: false },
+			},
+		});
 
-        if (existingMember.amountDue > 0) {
-            return {
-                status: HttpStatus.FORBIDDEN,
-                result: `Please pay your due amount ${existingMember.amountDue} to borrow this book.`
-            }
-        }
-    
-        const bookAvailability = await BookFunctions.checkBookAvailability(bookId);
-        
-        if (bookAvailability === true) {
+		if (!existingMember) {
+			return {
+				status: HttpStatus.UNAUTHORIZED,
+				result: `You must be a registered member to borrow this book. Please register first.`,
+			};
+		}
 
-            try {
+		const bookAvailability = await BookFunctions.checkBookAvailability(bookId);
 
-                const book = await db.book.findOne({
-                    where: {
-                        id: bookId,
-                        deleted: { [Sequelize.Op.ne]: true }
-                    }
-                });
+		if (bookAvailability === true) {
 
-                await db.book.update({
-                    noOfBooksAvailable: book.noOfBooksAvailable - 1
-                }, {
-                    where: {
-                        id: bookId
-                    }
-                });
+			try {
 
-                await db.member.update({
-                    noOfBooksTaken: existingMember.noOfBooksTaken + 1
-                }, {
-                    where: {
-                        id: memberId
-                    }
-                });
+				const book = await db.book.findOne({
+					where: {
+						id: bookId,
+						deleted: { [Sequelize.Op.ne]: true },
+					},
+				});
 
-                return {
-                    status: HttpStatus.OK,
-                    result: 'One copy of the requested book has been lent to you.'
-                }
+				await db.book.update({
+					noOfBooksAvailable: book.noOfBooksAvailable - 1,
+				}, {
+					where: {
+						id: bookId,
+					},
+				});
 
-            }
-            catch (error) {
+				await db.member.update({
+					noOfBooksTaken: existingMember.noOfBooksTaken + 1,
+				}, {
+					where: {
+						id: memberId,
+					},
+				});
 
-                logger.error(error);
-                return {
-                    status: HttpStatus.INTERNAL_SERVER_ERROR,
-                    result: 'Unable to lend this book at the moment due to technical issues.',
-                    error
-                }
+				return {
+					status: HttpStatus.OK,
+					result: 'One copy of the requested book has been lent to you.',
+				};
 
-            }
-        }
-        else if (bookAvailability === false) {
-            return {
-                status: HttpStatus.OK,
-                result: 'This book is not available at the moment.'
-            }
-        }
-        else {
-            return {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                result: 'Unable to lend this book at the moment due to technical issues.'
-            }
-        }
-    }
+			}
+			catch (error) {
 
-    async returnBook (req) {
+				logger.error(error);
+				return {
+					status: HttpStatus.INTERNAL_SERVER_ERROR,
+					result: 'Unable to lend this book at the moment due to technical issues.',
+					error,
+				};
 
-        const bookId = req.params.bookId;
-        const memberId = req.params.memberId;
+			}
+		}
+		else if (bookAvailability === false) {
+			return {
+				status: HttpStatus.OK,
+				result: 'This book is not available at the moment.',
+			};
+		}
+		else {
+			return {
+				status: HttpStatus.INTERNAL_SERVER_ERROR,
+				result: 'Unable to lend this book at the moment due to technical issues.',
+			};
+		}
+	}
 
-        try {
+	async returnBook (req) {
 
-            const book = await db.book.findOne({
-                where: {
-                    id: bookId,
-                    deleted: { [Sequelize.Op.ne]: true }
-                }
-            });
+		const bookId = req.params.bookId;
+		const memberId = req.params.memberId;
 
-            const existingMember = await db.member.findOne({
-                where: {
-                    id: memberId,
-                    unRegisteredYN: { [Sequelize.Op.ne]: true }
-                }
-            });
-            
-            if (!existingMember) {
-                return {
-                    status: HttpStatus.UNAUTHORIZED,
-                    result: `You must be a registered member to return a book. Please register first.`
-                }
-            }
+		try {
 
-            if (!book) {
-                return {
-                    status: HttpStatus.BAD_REQUEST,
-                    result: 'We did not lend you this book. Please check.'
-                }
-            }
+			const book = await db.book.findOne({
+				where: {
+					id: bookId,
+					deleted: { [Sequelize.Op.ne]: true },
+				},
+			});
 
-            if (existingMember.noOfBooksTaken === 0) {
-                return {
-                    status: HttpStatus.BAD_REQUEST,
-                    result: 'You\'ve returned all your books already. Please check.'
-                }
-            }
+			const existingMember = await db.member.findOne({
+				where: {
+					id: memberId,
+					unRegisteredYN: { [Sequelize.Op.ne]: true },
+				},
+			});
 
-            await db.book.update({
-                noOfBooksAvailable: book.noOfBooksAvailable + 1
-            }, {
-                where: {
-                    id: bookId
-                }
-            });
+			if (!existingMember) {
+				return {
+					status: HttpStatus.UNAUTHORIZED,
+					result: `You must be a registered member to return a book. Please register first.`,
+				};
+			}
 
-            await db.member.update({
-                noOfBooksTaken: existingMember.noOfBooksTaken - 1
-            }, {
-                where: {
-                    id: memberId
-                }
-            });
+			if (!book) {
+				return {
+					status: HttpStatus.BAD_REQUEST,
+					result: 'We did not lend you this book. Please check.',
+				};
+			}
 
-            return {
-                status: HttpStatus.OK,
-                result: 'The return of your book has been accepted.'
-            }
+			if (existingMember.noOfBooksTaken === 0) {
+				return {
+					status: HttpStatus.BAD_REQUEST,
+					result: 'You\'ve returned all your books already. Please check.',
+				};
+			}
 
-        }
-        catch (error) {
+			await db.book.update({
+				noOfBooksAvailable: book.noOfBooksAvailable + 1,
+			}, {
+				where: {
+					id: bookId,
+				},
+			});
 
-            logger.error(error);
-            return {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                result: 'Unable to accept this book at the moment due to technical issues.',
-                error
-            }
+			await db.member.update({
+				noOfBooksTaken: existingMember.noOfBooksTaken - 1,
+			}, {
+				where: {
+					id: memberId,
+				},
+			});
 
-        }
-    }
+			return {
+				status: HttpStatus.OK,
+				result: 'The return of your book has been accepted.',
+			};
 
-    async handleBookTransactions (req) {
+		}
+		catch (error) {
 
-        let transactionResult;
+			logger.error(error);
+			return {
+				status: HttpStatus.INTERNAL_SERVER_ERROR,
+				result: 'Unable to accept this book at the moment due to technical issues.',
+				error,
+			};
 
-        if (req.body.transactionType === 'BORROW') {
+		}
+	}
 
-            transactionResult = await this.borrowBook(req);
-            return transactionResult;
+	async handleBookTransactions (req) {
 
-        }
-        else if (req.body.transactionType === 'RETURN') {
+		let transactionResult;
 
-            transactionResult = await this.returnBook(req);
-            return transactionResult;
+		if (req.body.transactionType === 'BORROW') {
 
-        }
-        else {
+			transactionResult = await this.borrowBook(req);
+			return transactionResult;
 
-            return {
-                status: HttpStatus.BAD_REQUEST,
-                result: 'Missing or invalid transaction type. Specify either BORROW or RETURN as type. Should be a string.'
-            }
+		}
+		else if (req.body.transactionType === 'RETURN') {
 
-        }
-    }
-};
+			transactionResult = await this.returnBook(req);
+			return transactionResult;
+
+		}
+		else {
+
+			return {
+				status: HttpStatus.BAD_REQUEST,
+				result: 'Missing or invalid transaction type. Specify either BORROW or RETURN as type. Should be a string.',
+			};
+
+		}
+	}
+}
 
 const bookTransactionsInstance = new BookTransactions();
 

@@ -6,102 +6,102 @@ import { validateMember } from '../validators/memberValidator.js';
 
 export default class Member {
 
-    static async registerMember (req) {
+	static async registerMember (req) {
 
-        const { username = '', contactNumber = '' } = req.body;
-        let createdUser;
-        let existingMember;
+		const { username = '', contactNumber = '' } = req.body;
+		let createdUser;
+		let existingMember;
 
-        validateMember({ username, contactNumber });
+		validateMember({ username, contactNumber });
 
-        try {
+		try {
 
-            existingMember = await db.member.findOne({
-                where: {
-                    username,
-                    unRegisteredYN: { [Sequelize.Op.ne]: true }
-                }
-            });
+			existingMember = await db.member.findOne({
+				where: {
+					username,
+					unRegisteredYN: { [Sequelize.Op.ne]: true },
+				},
+			});
 
-            if (existingMember) {
-                return {
-                    status: HttpStatus.BAD_REQUEST,
-                    result: 'The requested user is already a registered member.'
-                }
-            }
+			if (existingMember) {
+				return {
+					status: HttpStatus.BAD_REQUEST,
+					result: 'The requested user is already a registered member.',
+				};
+			}
 
-            createdUser = await db.member.create({
-                username,
-                contactNumber
-            });
+			createdUser = await db.member.create({
+				username,
+				contactNumber,
+			});
 
-            return {
-                status: HttpStatus.CREATED,
-                result: 'The requested user has been registered.'
-            }
+			return {
+				status: HttpStatus.CREATED,
+				result: 'The requested user has been registered.',
+			};
 
-        }
-        catch (error) {
+		}
+		catch (error) {
 
-            logger.error(error);
-            return {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                result: 'Unable to register this user at the moment.',
-                error
-            }
+			logger.error(error);
+			return {
+				status: HttpStatus.INTERNAL_SERVER_ERROR,
+				result: 'Unable to register this user at the moment.',
+				error,
+			};
 
-        }
-    }
+		}
+	}
 
-    static async unRegisterMember (req) {
-        const memberId = req.params.id;
+	static async unRegisterMember (req) {
+		const memberId = req.params.id;
 
-        try {
+		try {
 
-            const existingMember = await db.member.findOne({
-                where: { 
-                    id: memberId
-                }
-            });
+			const existingMember = await db.member.findOne({
+				where: {
+					id: memberId,
+				},
+			});
 
-            if (!existingMember) {
-                return {
-                    status: HttpStatus.BAD_REQUEST,
-                    result: 'This user is not already registered with us.'
-                }
-            }
+			if (!existingMember) {
+				return {
+					status: HttpStatus.BAD_REQUEST,
+					result: 'This user is not already registered with us.',
+				};
+			}
 
-            if (existingMember.unRegisteredYN) {
-                return {
-                    status: HttpStatus.OK,
-                    result: 'This user has already unregsitered with us.'
-                }
-            };
+			if (existingMember.unRegisteredYN) {
+				return {
+					status: HttpStatus.OK,
+					result: 'This user has already unregistered with us.',
+				};
+			}
 
-            await db.member.update({
-                unRegisteredYN: true
-            }, {
-                where: {
-                    id: memberId
-                }
-            });
+			await db.member.update({
+				unRegisteredYN: true,
+			}, {
+				where: {
+					id: memberId,
+				},
+			});
 
-            return {
-                status: HttpStatus.OK,
-                result: 'The requested user has been unregistered.'
-            }
+			return {
+				status: HttpStatus.OK,
+				result: 'The requested user has been unregistered.',
+			};
 
-        }
-        catch (error) {
+		}
+		catch (error) {
 
-            logger.error(error);
-            return {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                result: 'Unable to unregister this user at the moment.',
-                error
-            }
+			logger.error(error);
+			return {
+				status: HttpStatus.INTERNAL_SERVER_ERROR,
+				result: 'Unable to unregister this user at the moment.',
+				error,
+			};
 
-        }
-    }
+		}
+	}
 
 }

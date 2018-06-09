@@ -1,42 +1,42 @@
 import logger from '../logger.js';
 
 export const requestHandler = async (req, res, requestHandlerFunction) => {
-   
-    let result = {};
 
-    try {
+	let result = {};
 
-        result = await requestHandlerFunction(req);
+	try {
 
-    }
-    catch (error) {
+		result = await requestHandlerFunction(req);
 
-        logger.error(error);
-       
-        result.status = 400;
-        result.result = 'Unable to process your request.'
+	}
+	catch (error) {
 
-        if (error) {
-            result.error = error.toString();
-        }
-        
-    }
-   
-    let jsonToReturn = {};
+		logger.error(error);
 
-    if (result.json) {
-        jsonToReturn = result.json;
-    }
-    else {
-        jsonToReturn = {
-            result: result.result,
-        };
+		result.status = 400;
+		result.result = 'Unable to process your request.';
 
-        if (result.error) {
-            jsonToReturn.error = result.error.toString();
-        }
-    }
-    logger.info(JSON.stringify(jsonToReturn));
-    res.status(result.status).json(jsonToReturn);
+		if (error) {
+			result.error = error.toString();
+		}
 
-}
+	}
+
+	let jsonToReturn = {};
+
+	if (result.json) {
+		jsonToReturn = result.json;
+	}
+	else {
+		jsonToReturn = {
+			result: result.result,
+		};
+
+		if (result.error) {
+			jsonToReturn.error = result.error.toString();
+		}
+	}
+	logger.info(JSON.stringify(jsonToReturn));
+	res.status(result.status).json(jsonToReturn);
+
+};

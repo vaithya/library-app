@@ -7,282 +7,289 @@ import { bookProperties } from '../constants/bookProperties.js';
 
 class Book {
 
-    constructor () {
-        // Need 'this' to be defined to access checkBookAvailability within borrowBook.
-        // All methods were static previously, but 'this' was undefined inside those methods when the methods were passed as arguments to the handler.
-        this.checkBookAvailability = this.checkBookAvailability.bind(this);
-        this.getBookAvailability = this.getBookAvailability.bind(this);
-    }
+	constructor () {
+		// Need 'this' to be defined to access checkBookAvailability within borrowBook.
+		// All methods were static previously, but 'this' was undefined inside those methods when the methods were passed as arguments to the handler.
+		this.checkBookAvailability = this.checkBookAvailability.bind(this);
+		this.getBookAvailability = this.getBookAvailability.bind(this);
+	}
 
-    async addBook (req) {
+	async addBook (req) {
 
-        const bookToAdd = req.body;
-        let createdBook;
-        let existingBook;
-        
-        validateBook(bookToAdd, { operation: 'add' });
+		const bookToAdd = req.body;
+		let createdBook;
+		let existingBook;
 
-        try {
+		validateBook(bookToAdd, { operation: 'add' });
 
-            existingBook = await db.book.findAll({
-                where: {
-                    deleted: { [Sequelize.Op.ne]: true },
-                    ...bookToAdd
-                }
-            });
+		const { name, author, edition, ...restOfBookProps } = bookToAdd;
 
-            if (existingBook.length === 0) {
-                createdBook = await db.book.create(Object.assign(bookToAdd, { noOfBooksAvailable: 1 }));
-            }
-            else {
+		try {
 
-                await db.book.update({
-                    noOfBooksAvailable: existingBook[0].noOfBooksAvailable + 1
-                }, {
-                    where: {
-                        id: existingBook[0].id
-                    }
-                });
+			existingBook = await db.book.findAll({
+				where: {
+					deleted: { [Sequelize.Op.ne]: true },
+					name,
+					author,
+					edition,
+				},
+			});
 
-                createdBook = existingBook[0];
-                createdBook.noOfBooksAvailable += 1;
-            }
+			if (existingBook.length === 0) {
+				createdBook = await db.book.create({
+					...bookToAdd,
+					noOfBooksAvailable: 1,
+				});
+			}
+			else {
 
-            return {
-                status: HttpStatus.CREATED,
-                result: 'This book has been added to our library.'
-            };
+				await db.book.update({
+					noOfBooksAvailable: existingBook[0].noOfBooksAvailable + 1,
+				}, {
+					where: {
+						id: existingBook[0].id,
+					},
+				});
 
-        }
-        catch (error) {
+				createdBook = existingBook[0];
+				createdBook.noOfBooksAvailable += 1;
+			}
 
-            logger.error(error);
-            return {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                result: 'Unable to create books at the moment.',
-                error
-            }
+			return {
+				status: HttpStatus.CREATED,
+				result: 'This book has been added to our library.',
+			};
 
-        }
-    }
+		}
+		catch (error) {
 
-    async getAllBooks (req) {
+			logger.error(error);
+			return {
+				status: HttpStatus.INTERNAL_SERVER_ERROR,
+				result: 'Unable to create books at the moment.',
+				error,
+			};
 
-        let allBooks;
-        try {
+		}
+	}
 
-            allBooks = await db.book.findAll({
-                where: {
-                    deleted: { [Sequelize.Op.ne]: true }
-                }
-            });
+	async getAllBooks (req) {
 
-            return {
-                status: HttpStatus.OK,
-                json: allBooks
-            }
+		let allBooks;
+		try {
 
-        }
-        catch (error) {
+			allBooks = await db.book.findAll({
+				where: {
+					deleted: { [Sequelize.Op.ne]: true },
+				},
+			});
 
-            logger.error(error);
-            return {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                result: 'Unable to fetch books at the moment.',
-                error
-            }
+			return {
+				status: HttpStatus.OK,
+				json: allBooks,
+			};
 
-        }
-    }
+		}
+		catch (error) {
 
-    async getBook (req) {
+			logger.error(error);
+			return {
+				status: HttpStatus.INTERNAL_SERVER_ERROR,
+				result: 'Unable to fetch books at the moment.',
+				error,
+			};
 
-        let book;
-        try {
+		}
+	}
 
-            book = await db.book.findOne({
-                where: {
-                    id: req.params.id,
-                    deleted: { [Sequelize.Op.ne]: true }
-                }
-            })
+	async getBook (req) {
 
-            if(!book) {
-                return {
-                    status: HttpStatus.OK,
-                    result: 'The requested book is not available now.'
-                }
-            }
+		let book;
+		try {
 
-            return {
-                status: HttpStatus.OK,
-                json: book
-            }
-            
-        }
-        catch (error) {
+			book = await db.book.findOne({
+				where: {
+					id: req.params.id,
+					deleted: { [Sequelize.Op.ne]: true },
+				},
+			});
 
-            logger.error(error);
-            return {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                result: 'Unable to get this book at the moment.',
-                error
-            }
+			if (!book) {
+				return {
+					status: HttpStatus.OK,
+					result: 'The requested book is not available now.',
+				};
+			}
 
-        }
-    }
+			return {
+				status: HttpStatus.OK,
+				json: book,
+			};
 
-    async checkBookAvailability (id) {
-        try {
+		}
+		catch (error) {
 
-            const existingBook = await db.book.findOne({
-                where: {
-                    id: id,
-                    deleted: { [Sequelize.Op.ne]: true }
-                }
-            });
-           
-            if (!existingBook) {
-               return false;
-            }
- 
-            const availabilityStatus = existingBook.noOfBooksAvailable > 0 ? true : false;
+			logger.error(error);
+			return {
+				status: HttpStatus.INTERNAL_SERVER_ERROR,
+				result: 'Unable to get this book at the moment.',
+				error,
+			};
 
-            return availabilityStatus;
+		}
+	}
 
-        }
-        catch (error) {
+	async checkBookAvailability (id) {
+		try {
 
-            logger.error(error);
-            return 'ERROR';
+			const existingBook = await db.book.findOne({
+				where: {
+					id: id,
+					deleted: { [Sequelize.Op.ne]: true },
+				},
+			});
 
-        }
-    }
+			if (!existingBook) {
+				return false;
+			}
 
-    async updateBook (req) {
+			const availabilityStatus = existingBook.noOfBooksAvailable > 0 ? true : false;
 
-        let propertiesToUpdate = {};
+			return availabilityStatus;
 
-        for (const key of Object.keys(req.body)) {
-            if (bookProperties[key]) {
-                propertiesToUpdate[key] = req.body[key];
-            }
-        }
+		}
+		catch (error) {
 
-        const propertyKeys = Object.keys(propertiesToUpdate);
+			logger.error(error);
+			return 'ERROR';
 
-        if (propertyKeys.length > 0) {
-            validateBook(propertiesToUpdate, { operation: 'update' });
-        }
-        else {
-            return {
-                status: HttpStatus.BAD_REQUEST,
-                result: 'Received no properties to update.'
-            }
-        }
+		}
+	}
 
-        try {
+	async updateBook (req) {
 
-            // Move the below query into a separate sub, as it is common for many subs.
-            const existingBook = await db.book.findOne({
-                where: {
-                    id: req.params.id,
-                    deleted: { [Sequelize.Op.ne]: true }
-                }
-            });
+		const propertiesToUpdate = {};
 
-            if (!existingBook) {
-                return {
-                    status: HttpStatus.OK,
-                    result: 'The requested book is not available to be updated.'
-                }
-            }
+		for (const key of Object.keys(req.body)) {
+			if (bookProperties[key]) {
+				propertiesToUpdate[key] = req.body[key];
+			}
+		}
 
-            await db.book.update(propertiesToUpdate, {
-                where: {
-                    id: req.params.id
-                }
-            });
+		const propertyKeys = Object.keys(propertiesToUpdate);
 
-            return {
-                status: HttpStatus.OK,
-                result: 'The properties of this book have been updated.'
-            }
+		if (propertyKeys.length > 0) {
+			validateBook(propertiesToUpdate, { operation: 'update' });
+		}
+		else {
+			return {
+				status: HttpStatus.BAD_REQUEST,
+				result: 'Received no properties to update.',
+			};
+		}
 
-        }
-        catch (error) {
+		try {
 
-            logger.error(error);
-            return {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                result: 'Unable to update this book at the moment.',
-                error
-            }
+			// Move the below query into a separate sub, as it is common for many subs.
+			const existingBook = await db.book.findOne({
+				where: {
+					id: req.params.id,
+					deleted: { [Sequelize.Op.ne]: true },
+				},
+			});
 
-        }
-    }
+			if (!existingBook) {
+				return {
+					status: HttpStatus.OK,
+					result: 'The requested book is not available to be updated.',
+				};
+			}
 
-    async deleteBook (req) {
+			await db.book.update(propertiesToUpdate, {
+				where: {
+					id: req.params.id,
+				},
+			});
 
-        try {
+			return {
+				status: HttpStatus.OK,
+				result: 'The properties of this book have been updated.',
+			};
 
-            const existingBook = await db.book.findOne({
-                where: {
-                    id: req.params.id,
-                    deleted: { [Sequelize.Op.ne]: true }
-                }
-            });
+		}
+		catch (error) {
 
-            if (!existingBook) {
-                return {
-                    status: HttpStatus.OK,
-                    result: 'The requested book is not available to be deleted.'
-                }
-            }
+			logger.error(error);
+			return {
+				status: HttpStatus.INTERNAL_SERVER_ERROR,
+				result: 'Unable to update this book at the moment.',
+				error,
+			};
 
-            await db.book.update({
-              deleted: true
-            }, {
-                where: {
-                    id: req.params.id
-                }
-            });
+		}
+	}
 
-            return {
-                status: HttpStatus.OK,
-                result: 'The requested book has been marked as deleted in the library records.'
-            }
+	async deleteBook (req) {
 
-        }
-        catch (error) {
+		try {
 
-            logger.error(error);
-            return {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                result: 'Unable to delete this book at the moment.',
-                error
-            }
-        }
-    }
+			const existingBook = await db.book.findOne({
+				where: {
+					id: req.params.id,
+					deleted: { [Sequelize.Op.ne]: true },
+				},
+			});
 
-    async getBookAvailability (req) {
-       
-        const availability = await this.checkBookAvailability(req.params.id);
+			if (!existingBook) {
+				return {
+					status: HttpStatus.OK,
+					result: 'The requested book is not available to be deleted.',
+				};
+			}
 
-        if (availability === 'ERROR') {
-            return {
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                result: 'Unable to check availability at the moment.'
-            }
-        }
-        else {
-            return {
-                status: HttpStatus.OK,
-                json: { availability }
-            }
-        }
-    }
-};
+			await db.book.update({
+				deleted: true,
+			}, {
+				where: {
+					id: req.params.id,
+				},
+			});
+
+			return {
+				status: HttpStatus.OK,
+				result: 'The requested book has been marked as deleted in the library records.',
+			};
+
+		}
+		catch (error) {
+
+			logger.error(error);
+			return {
+				status: HttpStatus.INTERNAL_SERVER_ERROR,
+				result: 'Unable to delete this book at the moment.',
+				error,
+			};
+		}
+	}
+
+	async getBookAvailability (req) {
+
+		const availability = await this.checkBookAvailability(req.params.id);
+
+		if (availability === 'ERROR') {
+			return {
+				status: HttpStatus.INTERNAL_SERVER_ERROR,
+				result: 'Unable to check availability at the moment.',
+			};
+		}
+		else {
+			return {
+				status: HttpStatus.OK,
+				json: { availability },
+			};
+		}
+	}
+}
 
 const bookInstance = new Book();
 

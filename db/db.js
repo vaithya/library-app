@@ -37,7 +37,7 @@ db.initializeDb = async () => {
 
 db.syncSchema = async (force = false) => {
 	try {
-		const params = { force };	
+		const params = { force };
 		await db.initializeDb();
 		await db.member.sync(params);
 		await db.book.sync(params);

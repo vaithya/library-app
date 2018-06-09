@@ -8,8 +8,8 @@
     "lint": "eslint src",
     "build:dev": "webpack -d",
     "run-server:dev": "nodemon dist/server.js -e js --watch dist/server.js",
-    "test": "jest --runInBand --forceExit",
-    "coverage": "jest --coverage --runInBand --forceExit --testResultsProcessor @athena/app-fabric-coverage-jest --coverageReporters text",
+    "test": "jest --runInBand",
+    "coverage": "jest --coverage --runInBand --testResultsProcessor @athena/app-fabric-coverage-jest --coverageReporters text",
     "start:dev": "npm-run-all --parallel watch run-server:dev"
   },
   "jest": {

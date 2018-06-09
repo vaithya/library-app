@@ -1,4 +1,4 @@
-export const memberProperties = { 
-   username: 'USERNAME',
-   contactNumber: 'CONTACTNUMBER'
-}
+export const memberProperties = {
+	username: 'USERNAME',
+	contactNumber: 'CONTACTNUMBER',
+};
