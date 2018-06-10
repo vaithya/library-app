@@ -71,7 +71,10 @@ export const validateBook = ({ name, author, edition, publishedDate, shelfNumber
 	}
 
 	if (validationError) {
-		throw Error(validationError);
+		return validationError;
+	}
+	else {
+		return undefined;
 	}
 
 };

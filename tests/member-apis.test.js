@@ -3,11 +3,12 @@ import { db } from '../db/db.js';
 import app from '../server/server.js';
 import { populateDb } from './testdata/populateDb.js';
 import Sequelize from 'sequelize';
+import logger from '../logger.js';
 
 beforeAll(async () => {
 	const promise = new Promise((resolve, reject) => {
 		app.on('serverStarted', function () {
-			console.log('server started!');
+			logger.info('Server started!');
 			resolve(1);
 		});
 	});
@@ -36,7 +37,7 @@ test('Register a member', async () => {
 	await request(app)
 		.post('/api/members')
 		.send({})
-		.expect(400)
+		.expect(422)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Username cannot be empty and it should be a string, should be between 6-12 characters\/digits. Cannot contain special characters. /);
 		});
@@ -46,7 +47,7 @@ test('Register a member', async () => {
 		.send({
 			username: 123,
 		})
-		.expect(400)
+		.expect(422)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Username cannot be empty and it should be a string, should be between 6-12 characters\/digits. Cannot contain special characters. /);
 		});
@@ -56,7 +57,7 @@ test('Register a member', async () => {
 		.send({
 			username: '',
 		})
-		.expect(400)
+		.expect(422)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Username cannot be empty and it should be a string, should be between 6-12 characters\/digits. Cannot contain special characters. /);
 		});
@@ -66,7 +67,7 @@ test('Register a member', async () => {
 		.send({
 			username: 'abc',
 		})
-		.expect(400)
+		.expect(422)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Username should be between 6-12 characters\/digits. Cannot contain special characters. /);
 		});
@@ -77,7 +78,7 @@ test('Register a member', async () => {
 			username: 'abcdef',
 			contactNumber: 123,
 		})
-		.expect(400)
+		.expect(422)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Contact number should be a string. /);
 		});
@@ -88,7 +89,7 @@ test('Register a member', async () => {
 			username: 'abcdef',
 			contactNumber: '123a',
 		})
-		.expect(400)
+		.expect(422)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Contact number can contain only numbers. /);
 		});
@@ -99,7 +100,7 @@ test('Register a member', async () => {
 			username: 'abcdef',
 			contactNumber: '123',
 		})
-		.expect(400)
+		.expect(200)
 		.expect((res) => {
 			expect(res.body.result).toMatch(/The requested user is already a registered member./);
 		});

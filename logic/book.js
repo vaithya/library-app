@@ -19,15 +19,24 @@ class Book {
 		const bookToAdd = req.body;
 		let createdBook;
 		let existingBook;
+		let validationError;
 
 		try {
-			validateBook(bookToAdd, { operation: 'add' });
+			validationError = validateBook(bookToAdd, { operation: 'add' });
 		}
 		catch (error) {
 			throw Error(error);
 		}
 
-		const { name, author, edition, ...restOfBookProps } = bookToAdd;
+		if (validationError) {
+			return {
+				status: HttpStatus.UNPROCESSABLE_ENTITY,
+				result: 'Invalid input.',
+				error: validationError,
+			};
+		}
+
+		const { name, author, edition } = bookToAdd;
 
 		try {
 
@@ -177,6 +186,7 @@ class Book {
 	async updateBook (req) {
 
 		const propertiesToUpdate = {};
+		let validationError;
 
 		for (const key of Object.keys(req.body)) {
 			if (bookProperties[key]) {
@@ -188,15 +198,23 @@ class Book {
 
 		if (propertyKeys.length > 0) {
 			try {
-				validateBook(propertiesToUpdate, { operation: 'update' });
+				validationError = validateBook(propertiesToUpdate, { operation: 'update' });
 			}
 			catch (error) {
 				throw Error(error);
 			}
+
+			if (validationError) {
+				return {
+					status: HttpStatus.UNPROCESSABLE_ENTITY,
+					result: 'Invalid input.',
+					error: validationError,
+				};
+			}
 		}
 		else {
 			return {
-				status: HttpStatus.BAD_REQUEST,
+				status: HttpStatus.UNPROCESSABLE_ENTITY,
 				result: 'Received no properties to update.',
 			};
 		}

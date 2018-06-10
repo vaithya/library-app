@@ -17,7 +17,10 @@ export const validateMember = ({ username, contactNumber }) => {
 	}
 
 	if (validationError) {
-		throw Error(validationError);
+		return validationError;
+	}
+	else {
+		return undefined;
 	}
 
 };

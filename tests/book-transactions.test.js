@@ -4,11 +4,12 @@ import app from '../server/server.js';
 import { populateDb } from './testdata/populateDb.js';
 import Sequelize from 'sequelize';
 import BookFunctions from '../logic/book.js';
+import logger from '../logger.js';
 
 beforeAll(async () => {
 	const promise = new Promise((resolve, reject) => {
 		app.on('serverStarted', function () {
-			console.log('server started!');
+			logger.info('Server started!');
 			resolve(1);
 		});
 	});
@@ -34,7 +35,7 @@ test('Borrow and return a book', async () => {
 	await request(app)
 		.post(`/api/members/${exampleMember.id}/books/${exampleBook.id}`)
 		.send({})
-		.expect(400);
+		.expect(422);
 
 	await request(app)
 		.post(`/api/members/${exampleMember.id}/books/${exampleBook.id}`)
@@ -87,7 +88,7 @@ test('Borrow and return a book', async () => {
 		.send({
 			transactionType: 'RETURN',
 		})
-		.expect(400)
+		.expect(200)
 		.expect((res) => {
 			expect(res.body.result).toMatch(/You\'ve returned all your books already. Please check./);
 		});
@@ -107,7 +108,7 @@ test('Borrow and return a book', async () => {
 		.send({
 			transactionType: 'RETURN',
 		})
-		.expect(400)
+		.expect(200)
 		.expect((res) => {
 			expect(res.body.result).toMatch(/We did not lend you this book. Please check./);
 		});

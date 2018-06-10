@@ -11,12 +11,21 @@ class Member {
 		const { username = '', contactNumber = '' } = req.body;
 
 		let existingMember;
+		let validationError;
 
 		try {
-			validateMember({ username, contactNumber });
+			validationError = validateMember({ username, contactNumber });
 		}
 		catch (error) {
 			throw Error(error);
+		}
+
+		if (validationError) {
+			return {
+				status: HttpStatus.UNPROCESSABLE_ENTITY,
+				result: 'Invalid input.',
+				error: validationError,
+			};
 		}
 
 		try {
@@ -30,7 +39,7 @@ class Member {
 
 			if (existingMember) {
 				return {
-					status: HttpStatus.BAD_REQUEST,
+					status: HttpStatus.OK,
 					result: 'The requested user is already a registered member.',
 				};
 			}

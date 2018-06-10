@@ -122,14 +122,14 @@ class BookTransactions {
 
 			if (!book) {
 				return {
-					status: HttpStatus.BAD_REQUEST,
+					status: HttpStatus.OK,
 					result: 'We did not lend you this book. Please check.',
 				};
 			}
 
 			if (existingMember.noOfBooksTaken === 0) {
 				return {
-					status: HttpStatus.BAD_REQUEST,
+					status: HttpStatus.OK,
 					result: 'You\'ve returned all your books already. Please check.',
 				};
 			}
@@ -187,7 +187,7 @@ class BookTransactions {
 		else {
 
 			return {
-				status: HttpStatus.BAD_REQUEST,
+				status: HttpStatus.UNPROCESSABLE_ENTITY,
 				result: 'Missing or invalid transaction type. Specify either BORROW or RETURN as type. Should be a string.',
 			};
 

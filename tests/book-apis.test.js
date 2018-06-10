@@ -3,11 +3,12 @@ import { db } from '../db/db.js';
 import app from '../server/server.js';
 import { populateDb } from './testdata/populateDb.js';
 import Sequelize from 'sequelize';
+import logger from '../logger.js';
 
 beforeAll(async () => {
 	const promise = new Promise((resolve, reject) => {
 		app.on('serverStarted', function () {
-			console.log('server started!');
+			logger.info('Server started!');
 			resolve(1);
 		});
 	});
@@ -64,7 +65,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 			shelfNumber: '5',
 			publishedDate: '2018-12-02',
 		})
-		.expect(400)
+		.expect(422)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Name of the book cannot be empty, should be a string/);
 		});
@@ -77,7 +78,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 			shelfNumber: '5',
 			publishedDate: '2018-12-02',
 		})
-		.expect(400)
+		.expect(422)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Name of the book cannot be empty, should be a string, has to contain between 6 and 20 characters and it cannot contain special characters. Author of the book cannot be empty and it should be a string. /);
 			expect(res.body.error).toMatch(/Author of the book cannot be empty and it should be a string. /);
@@ -92,7 +93,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 			shelfNumber: '5',
 			publishedDate: '2018-12-02',
 		})
-		.expect(400)
+		.expect(422)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Name of the book has to contain between 6 and 20 characters and it cannot contain special characters. /);
 			expect(res.body.error).toMatch(/Author of the book cannot be empty and it should be a string. /);
@@ -104,7 +105,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 			name: 'new book',
 			author: 'abc',
 		})
-		.expect(400)
+		.expect(422)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Shelf number of the book cannot be empty and it should be a string. /);
 		});
@@ -117,7 +118,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 			shelfNumber: 5,
 			publishedDate: '2018-12-02',
 		})
-		.expect(400)
+		.expect(422)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Shelf number of the book cannot be empty and it should be a string. /);
 			expect(res.body.error).toMatch(/Edition number of the book is not valid. It has to be a number. /);
@@ -131,7 +132,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 			edition: '5',
 			publishedDate: '2018-12',
 		})
-		.expect(400)
+		.expect(422)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Published date of the book is not valid. /);
 		});
@@ -193,7 +194,7 @@ test('Update book properties API', async () => {
 	await request(app)
 		.patch(`/api/books/${bookToUpdate.id}`)
 		.send({})
-		.expect(400);
+		.expect(422);
 
 	await request(app)
 		.patch(`/api/books/${bookToUpdate.id}`)
