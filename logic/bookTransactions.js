@@ -3,6 +3,7 @@ import { db } from '../db/db.js';
 import logger from '../logger.js';
 import HttpStatus from 'http-status-codes';
 import BookFunctions from '../logic/book.js';
+import { validateId } from '../validators/commonValidator.js';
 
 class BookTransactions {
 
@@ -171,6 +172,20 @@ class BookTransactions {
 	async handleBookTransactions (req) {
 
 		let transactionResult;
+
+		try {
+			validateId(req.params.bookId);
+		}
+		catch (error) {
+			throw new Error ('Book ' + error);
+		}
+
+		try {
+			validateId(req.params.memberId);
+		}
+		catch (error) {
+			throw new Error ('Member ' + error);
+		}
 
 		if (req.body.transactionType === 'BORROW') {
 

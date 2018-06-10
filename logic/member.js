@@ -2,6 +2,7 @@ import logger from '../logger.js';
 import { db } from '../db/db.js';
 import HttpStatus from 'http-status-codes';
 import { validateMember } from '../validators/memberValidator.js';
+import { validateId } from '../validators/commonValidator.js';
 import Sequelize from 'sequelize';
 
 class Member {
@@ -68,6 +69,9 @@ class Member {
 	}
 
 	static async unRegisterMember (req) {
+
+		validateId(req.params.id);
+
 		const memberId = req.params.id;
 
 		try {

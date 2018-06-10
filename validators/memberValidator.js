@@ -22,5 +22,4 @@ export const validateMember = ({ username, contactNumber }) => {
 	else {
 		return undefined;
 	}
-
 };

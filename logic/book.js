@@ -3,6 +3,7 @@ import { db } from '../db/db.js';
 import logger from '../logger.js';
 import HttpStatus from 'http-status-codes';
 import { validateBook } from '../validators/bookValidator.js';
+import { validateId } from '../validators/commonValidator.js';
 import { bookProperties } from '../constants/bookProperties.js';
 
 class Book {
@@ -118,6 +119,8 @@ class Book {
 
 	async getBook (req) {
 
+		validateId(req.params.id);
+
 		let book;
 		try {
 
@@ -155,6 +158,9 @@ class Book {
 	}
 
 	async checkBookAvailability (id) {
+
+		validateId(id);
+
 		try {
 
 			const existingBook = await db.book.findOne({
@@ -263,6 +269,8 @@ class Book {
 
 	async deleteBook (req) {
 
+		validateId(req.params.id);
+
 		try {
 
 			const existingBook = await db.book.findOne({
@@ -307,6 +315,8 @@ class Book {
 	}
 
 	async getBookAvailability (req) {
+
+		validateId(req.params.id);
 
 		const availability = await this.checkBookAvailability(req.params.id);
 

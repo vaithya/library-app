@@ -154,6 +154,10 @@ test('Unregister a member', async () => {
 		.expect(400);
 
 	await request(app)
+		.delete(`/api/members/abcd`)
+		.expect(400);
+
+	await request(app)
 		.post('/api/members')
 		.send({
 			username: 'testuser10',
