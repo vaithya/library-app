@@ -36,15 +36,12 @@ db.initializeDb = async () => {
 };
 
 db.syncSchema = async (force = false) => {
-	try {
-		const params = { force };
-		await db.initializeDb();
-		await db.member.sync(params);
-		await db.book.sync(params);
-	}
-	catch (e) {
-		logger.error(e);
-	}
+
+	const params = { force };
+	await db.initializeDb();
+	await db.member.sync(params);
+	await db.book.sync(params);
+
 };
 
 export { db };

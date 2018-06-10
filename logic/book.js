@@ -20,7 +20,12 @@ class Book {
 		let createdBook;
 		let existingBook;
 
-		validateBook(bookToAdd, { operation: 'add' });
+		try {
+			validateBook(bookToAdd, { operation: 'add' });
+		}
+		catch (error) {
+			throw Error(error);
+		}
 
 		const { name, author, edition, ...restOfBookProps } = bookToAdd;
 
@@ -120,11 +125,12 @@ class Book {
 					result: 'The requested book is not available now.',
 				};
 			}
-
-			return {
-				status: HttpStatus.OK,
-				json: book,
-			};
+			else {
+				return {
+					status: HttpStatus.OK,
+					json: book,
+				};
+			}
 
 		}
 		catch (error) {
@@ -152,10 +158,12 @@ class Book {
 			if (!existingBook) {
 				return false;
 			}
+			else {
 
-			const availabilityStatus = existingBook.noOfBooksAvailable > 0 ? true : false;
+				const availabilityStatus = existingBook.noOfBooksAvailable > 0 ? true : false;
 
-			return availabilityStatus;
+				return availabilityStatus;
+			}
 
 		}
 		catch (error) {
@@ -179,7 +187,12 @@ class Book {
 		const propertyKeys = Object.keys(propertiesToUpdate);
 
 		if (propertyKeys.length > 0) {
-			validateBook(propertiesToUpdate, { operation: 'update' });
+			try {
+				validateBook(propertiesToUpdate, { operation: 'update' });
+			}
+			catch (error) {
+				throw Error(error);
+			}
 		}
 		else {
 			return {
@@ -204,17 +217,18 @@ class Book {
 					result: 'The requested book is not available to be updated.',
 				};
 			}
+			else {
+				await db.book.update(propertiesToUpdate, {
+					where: {
+						id: req.params.id,
+					},
+				});
 
-			await db.book.update(propertiesToUpdate, {
-				where: {
-					id: req.params.id,
-				},
-			});
-
-			return {
-				status: HttpStatus.OK,
-				result: 'The properties of this book have been updated.',
-			};
+				return {
+					status: HttpStatus.OK,
+					result: 'The properties of this book have been updated.',
+				};
+			}
 
 		}
 		catch (error) {
@@ -246,19 +260,21 @@ class Book {
 					result: 'The requested book is not available to be deleted.',
 				};
 			}
+			else {
 
-			await db.book.update({
-				deleted: true,
-			}, {
-				where: {
-					id: req.params.id,
-				},
-			});
+				await db.book.update({
+					deleted: true,
+				}, {
+					where: {
+						id: req.params.id,
+					},
+				});
 
-			return {
-				status: HttpStatus.OK,
-				result: 'The requested book has been marked as deleted in the library records.',
-			};
+				return {
+					status: HttpStatus.OK,
+					result: 'The requested book has been marked as deleted in the library records.',
+				};
+			}
 
 		}
 		catch (error) {

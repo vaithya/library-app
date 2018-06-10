@@ -6,7 +6,7 @@ export const bookTransactionsRouter = () => {
 
 	const bookTransactionsRouter = express.Router();
 
-	bookTransactionsRouter.post   ('/members/:memberId/books/:bookId',              async (req, res) => requestHandler(req, res, BookTransactions.handleBookTransactions));
+	bookTransactionsRouter.post   ('/members/:memberId/books/:bookId', (req, res) => requestHandler(req, res, BookTransactions.handleBookTransactions));
 
 	return bookTransactionsRouter;
 

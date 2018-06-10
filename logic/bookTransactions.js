@@ -30,64 +30,65 @@ class BookTransactions {
 				result: `You must be a registered member to borrow this book. Please register first.`,
 			};
 		}
+		else {
+			const bookAvailability = await BookFunctions.checkBookAvailability(bookId);
 
-		const bookAvailability = await BookFunctions.checkBookAvailability(bookId);
+			if (bookAvailability === true) {
 
-		if (bookAvailability === true) {
+				try {
 
-			try {
+					const book = await db.book.findOne({
+						where: {
+							id: bookId,
+							deleted: { [Sequelize.Op.ne]: true },
+						},
+					});
 
-				const book = await db.book.findOne({
-					where: {
-						id: bookId,
-						deleted: { [Sequelize.Op.ne]: true },
-					},
-				});
+					await db.book.update({
+						noOfBooksAvailable: book.noOfBooksAvailable - 1,
+					}, {
+						where: {
+							id: bookId,
+						},
+					});
 
-				await db.book.update({
-					noOfBooksAvailable: book.noOfBooksAvailable - 1,
-				}, {
-					where: {
-						id: bookId,
-					},
-				});
+					await db.member.update({
+						noOfBooksTaken: existingMember.noOfBooksTaken + 1,
+					}, {
+						where: {
+							id: memberId,
+						},
+					});
 
-				await db.member.update({
-					noOfBooksTaken: existingMember.noOfBooksTaken + 1,
-				}, {
-					where: {
-						id: memberId,
-					},
-				});
+					return {
+						status: HttpStatus.OK,
+						result: 'One copy of the requested book has been lent to you.',
+					};
 
+				}
+				catch (error) {
+
+					logger.error(error);
+					return {
+						status: HttpStatus.INTERNAL_SERVER_ERROR,
+						result: 'Unable to lend this book at the moment due to technical issues.',
+						error,
+					};
+
+				}
+			}
+			else if (bookAvailability === false) {
 				return {
 					status: HttpStatus.OK,
-					result: 'One copy of the requested book has been lent to you.',
+					result: 'This book is not available at the moment.',
 				};
-
 			}
-			catch (error) {
-
-				logger.error(error);
+			else {
 				return {
 					status: HttpStatus.INTERNAL_SERVER_ERROR,
 					result: 'Unable to lend this book at the moment due to technical issues.',
-					error,
 				};
-
 			}
-		}
-		else if (bookAvailability === false) {
-			return {
-				status: HttpStatus.OK,
-				result: 'This book is not available at the moment.',
-			};
-		}
-		else {
-			return {
-				status: HttpStatus.INTERNAL_SERVER_ERROR,
-				result: 'Unable to lend this book at the moment due to technical issues.',
-			};
 		}
 	}
 

@@ -6,33 +6,33 @@ module.exports = [
 	{
 		name: 'server',
 		target: 'node', // in order to ignore built-in modules like path, fs, etc.
-		context: __dirname + "/server",
+		context: __dirname + '/server',
 		node: {
 			// dont inject __dirname, leave it as global.__dirname
 			// dirname is set to / by webpack.
-			__dirname: false
+			__dirname: false,
 		},
-		entry: ['babel-polyfill', './server.js'], // with respect to the context
+		entry: [ 'babel-polyfill', './server.js' ], // with respect to the context
 		output: {
-			path: __dirname + "/dist",
-			filename: "server.js"
+			path: __dirname + '/dist',
+			filename: 'server.js',
 		},
-		externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
-		resolve: { extensions: ['.js'] }, // to leave off extensions while importing in our files.
+		externals: [ nodeExternals() ], // in order to ignore all modules in node_modules folder
+		resolve: { extensions: [ '.js' ] }, // to leave off extensions while importing in our files.
 		module: {
 			rules: [
 				{
 					test: /\.js?$/,
 					exclude: /node_modules/,
-					use: [{
+					use: [ {
 						loader: 'babel-loader',
 						options: {
-							presets: ['env'],
-							plugins: ['transform-object-rest-spread']
-						}
-					}]
-				}
-			]
-		}
-	}
+							presets: [ 'env' ],
+							plugins: [ 'transform-object-rest-spread' ],
+						},
+					} ],
+				},
+			],
+		},
+	},
 ];

@@ -1,18 +1,23 @@
-import Sequelize from 'sequelize';
-import { db } from '../db/db.js';
 import logger from '../logger.js';
+import { db } from '../db/db.js';
 import HttpStatus from 'http-status-codes';
 import { validateMember } from '../validators/memberValidator.js';
+import Sequelize from 'sequelize';
 
-export default class Member {
+class Member {
 
 	static async registerMember (req) {
 
 		const { username = '', contactNumber = '' } = req.body;
-		let createdUser;
+
 		let existingMember;
 
-		validateMember({ username, contactNumber });
+		try {
+			validateMember({ username, contactNumber });
+		}
+		catch (error) {
+			throw Error(error);
+		}
 
 		try {
 
@@ -30,7 +35,7 @@ export default class Member {
 				};
 			}
 
-			createdUser = await db.member.create({
+			await db.member.create({
 				username,
 				contactNumber,
 			});
@@ -103,5 +108,6 @@ export default class Member {
 
 		}
 	}
-
 }
+
+export default Member;

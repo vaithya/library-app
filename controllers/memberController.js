@@ -6,8 +6,8 @@ export const memberRouter = () => {
 
 	const memberRouter = express.Router();
 
-	memberRouter.post   ('/members',     async (req, res) => requestHandler(req, res, MemberFunctions.registerMember));
-	memberRouter.delete ('/members/:id', async (req, res) => requestHandler(req, res, MemberFunctions.unRegisterMember));
+	memberRouter.post   ('/members',     (req, res) => requestHandler(req, res, MemberFunctions.registerMember));
+	memberRouter.delete ('/members/:id', (req, res) => requestHandler(req, res, MemberFunctions.unRegisterMember));
 
 	return memberRouter;
 };

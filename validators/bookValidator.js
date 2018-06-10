@@ -1,10 +1,8 @@
-import validator from 'validator';
-
 const validateName = (name) => {
 	if (!name || !(typeof (name) === 'string')) {
 		return 'Name of the book cannot be empty, should be a string, has to contain between 6 and 20 characters and it cannot contain special characters. ';
 	}
-	else if (!validator.matches(name, /[a-zA-Z0-9\s]{6,20}/i)) {
+	else if (!name.match(/[a-zA-Z0-9\s]{6,20}/i)) {
 		return 'Name of the book has to contain between 6 and 20 characters and it cannot contain special characters. ';
 	}
 	else {

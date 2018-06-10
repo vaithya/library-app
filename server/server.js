@@ -20,13 +20,13 @@ app.use('/api', bookRouter());
 app.use('/api', memberRouter());
 app.use('/api', bookTransactionsRouter());
 
-const httpServer = app.listen(port, async () => {
-	await db.syncSchema();
-	console.log(`Server is running on port ${port}.`);
+const httpServer = app.listen(port, () => {
+	db.syncSchema();
+	logger.info(`Server is running on port ${port}.`);
 	app.emit('serverStarted');
 });
 
-app.shutDown = async () => {
+app.shutDown = () => {
 	logger.info('shutting down library app');
 
 	return new Promise((resolve, reject) => {
