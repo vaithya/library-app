@@ -62,7 +62,7 @@ export const bookRouter = () => {
 
 	/**
 	 * @swagger
-	 * /api/books/:id:
+	 * /api/books/{id}:
 	 *   get:
 	 *     description: Gets a book from the library
 	 *     tags:
@@ -71,7 +71,7 @@ export const bookRouter = () => {
 	 *       - application/json
 	 *     parameters:
 	 *       - in: path
-	 *         name: book id
+	 *         name: id
 	 *         description: The id of the book you want to get.
 	 *     responses:
 	 *        "200":
@@ -83,7 +83,7 @@ export const bookRouter = () => {
 
 	/**
 	 * @swagger
-	 * /api/books/availability/:id:
+	 * /api/books/availability/{id}:
 	 *   get:
 	 *     description: Checks whether the book is available or not.
 	 *     tags:
@@ -92,7 +92,7 @@ export const bookRouter = () => {
 	 *       - application/json
 	 *     parameters:
 	 *       - in: path
-	 *         name: book id
+	 *         name: id
 	 *         description: The id of the book you want to check availability for.
 	 *     responses:
 	 *        "200":
@@ -104,7 +104,7 @@ export const bookRouter = () => {
 
 	/**
 	 * @swagger
-	 * /api/books/:id:
+	 * /api/books/{id}:
 	 *   patch:
 	 *     description: Updates properties of a book.
 	 *     tags:
@@ -113,7 +113,7 @@ export const bookRouter = () => {
 	 *       - application/json
 	 *     parameters:
 	 *       - in: path
-	 *         name: book id
+	 *         name: id
 	 *         description: The id of the book you want to update properties.
 	 *       - in: body
 	 *         name: body
@@ -144,7 +144,7 @@ export const bookRouter = () => {
 
 	/**
 	 * @swagger
-	 * /api/books/:id:
+	 * /api/books/{id}:
 	 *   delete:
 	 *     description: Removes a book from the library
 	 *     tags:
@@ -153,7 +153,7 @@ export const bookRouter = () => {
 	 *       - application/json
 	 *     parameters:
 	 *       - in: path
-	 *         name: book id
+	 *         name: id
 	 *         description: The id of the book you want to remove.
 	 *     responses:
 	 *        "200":

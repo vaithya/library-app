@@ -8,7 +8,7 @@ export const bookTransactionsRouter = () => {
 
 	/**
 	 * @swagger
-	 * /api/members/:memberId/books/:bookId:
+	 * /api/members/{memberId}/books/{bookId}:
 	 *   post:
 	 *     description: Borrow / Return a book.
 	 *     tags:
@@ -17,10 +17,10 @@ export const bookTransactionsRouter = () => {
 	 *       - application/json
 	 *     parameters:
 	 *       - in: path
-	 *         name: book id
+	 *         name: bookId
 	 *         description: The id of the book you want to borrow / return.
 	 *       - in: path
-	 *         name: book id
+	 *         name: memberId
 	 *         description: The id of the member who wants to do this transaction.
 	 *       - in: body
 	 *         name: body

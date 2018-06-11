@@ -39,7 +39,7 @@ export const memberRouter = () => {
 
 	/**
 	 * @swagger
-	 * /api/members/:id:
+	 * /api/members/{id}:
 	 *   delete:
 	 *     description: Unregisters a member from the library
 	 *     tags:
@@ -48,7 +48,7 @@ export const memberRouter = () => {
 	 *       - application/json
 	 *     parameters:
 	 *       - in: path
-	 *         name: member id
+	 *         name: id
 	 *         description: The id of the member you want to unregister.
 	 *     responses:
 	 *        "200":
