@@ -18,7 +18,6 @@ module.exports = [
 			filename: 'server.js',
 		},
 		externals: [ nodeExternals() ], // in order to ignore all modules in node_modules folder
-		resolve: { extensions: [ '.js' ] }, // to leave off extensions while importing in our files.
 		module: {
 			rules: [
 				{
