@@ -19,9 +19,10 @@ To build a book management application with APIs to achieve the following:
 - Check availability of a book
 
 
+
 Libraries & Frameworks Used:
 
-1.  Express.js 				-  A web framework for Node.js using which we can assign handlers for specific types of requests, define our routes, add middlewares etc.
+1.  Express.js 				-  A web framework for Node.js using which we can assign handlers for requests, define routes, add middlewares etc.
 2.  Sequelize  				-  A promise based ORM for postgres database. Wrapper around postgres operations.
 3.  Validator  				-  A library of string validators.
 4.  Jest       				-  Unit testing framework.
@@ -34,12 +35,14 @@ Libraries & Frameworks Used:
 12. Swagger    				-  API documentation
 
 
+
 API Documentation: 
 
 1. Clone the git repository.
 2. Run 'npm install'.
 3. Run 'npm run start:dev'.
 4. From the browser, go to 'localhost:8080/api-docs'.
+
 
 
 Unit Test Report: 
@@ -60,6 +63,7 @@ Unit Test Report:
 
 Test Suites: 3 passed, 3 total
 Tests:       8 passed, 8 total
+
 
 
 Code Coverage: 
@@ -101,6 +105,7 @@ All files                       |    91.55 |    82.87 |    91.45 |    98.67 |   
   commonValidator.js            |      100 |      100 |      100 |      100 |                   |
   memberValidator.js            |      100 |      100 |      100 |      100 |                   |
 --------------------------------|----------|----------|----------|----------|-------------------|
+
 
 
 My Confluence Page: 
