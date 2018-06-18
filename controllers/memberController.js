@@ -29,9 +29,7 @@ export const memberRouter = () => {
 	 *        "201":
 	 *           description: Registered the member successfully.
 	 *        "400":
-	 *           description: Bad request.
-	 *        "422":
-	 *           description: Missing/Incorrect input. Member is already registered.
+	 *           description: Bad request. Missing/Incorrect input. Member is already registered.
 	 *        "500":
 	 *           description: Unable to process the request.
 	 */

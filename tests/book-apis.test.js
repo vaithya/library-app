@@ -67,7 +67,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 		})
 		.expect(400)
 		.expect((res) => {
-			expect(res.body.error).toMatch(/Name of the book cannot be empty, should be a string/);
+			expect(res.body.error).toMatch(/Name of the book cannot be empty, should be a string. /);
 		});
 
 	await request(app)
@@ -80,7 +80,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 		})
 		.expect(400)
 		.expect((res) => {
-			expect(res.body.error).toMatch(/Name of the book cannot be empty, should be a string, has to contain between 6 and 20 characters and it cannot contain special characters. Author of the book cannot be empty and it should be a string. /);
+			expect(res.body.error).toMatch(/Name of the book cannot be empty, should be a string. /);
 			expect(res.body.error).toMatch(/Author of the book cannot be empty and it should be a string. /);
 		});
 
@@ -145,7 +145,7 @@ test('Get book APIs', async () => {
 		.get('/api/books')
 		.expect(200)
 		.expect((res) => {
-			expect(res.body.length).toBe(3);
+			expect(res.body.data.length).toBe(3);
 		});
 
 	const bookToGet = await db.book.findOne({
@@ -158,7 +158,7 @@ test('Get book APIs', async () => {
 		.get(`/api/books/${bookToGet.id}`)
 		.expect(200)
 		.expect((res) => {
-			expect(res.body.id).toBe(bookToGet.id);
+			expect(res.body.data.id).toBe(bookToGet.id);
 		});
 
 	await request(app)
@@ -172,14 +172,14 @@ test('Get book APIs', async () => {
 		.get(`/api/books/availability/9999`)
 		.expect(200)
 		.expect((res) => {
-			expect(res.body.availability).toBe(false);
+			expect(res.body.data.availability).toBe(false);
 		});
 
 	await request(app)
 		.get(`/api/books/availability/${bookToGet.id}`)
 		.expect(200)
 		.expect((res) => {
-			expect(res.body.availability).toBe(true);
+			expect(res.body.data.availability).toBe(true);
 		});
 });
 

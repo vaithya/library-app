@@ -41,11 +41,9 @@ export const bookTransactionsRouter = () => {
 	 *                 "transactionType": "RETURN"
 	 *               }
 	 *        "400":
-	 *           description: Bad request.
+	 *           description: Bad request. Missing/Incorrect input.
 	 *        "401":
 	 *           description: Unregistered member trying to make this transaction.
-	 *        "422":
-	 *           description: Missing/Incorrect input.
 	 *        "500":
 	 *           description: Unable to process the request.
 	 */

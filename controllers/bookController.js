@@ -35,9 +35,7 @@ export const bookRouter = () => {
 	 *        "201":
 	 *           description: Added the book successfully.
 	 *        "400":
-	 *           description: Bad request.
-	 *        "422":
-	 *           description: Invalid input. Missing/Incorrect input.
+	 *           description: Bad request. Invalid input. Missing/Incorrect input.
 	 *        "500":
 	 *           description: Unable to process the request.
 	 */
@@ -134,9 +132,7 @@ export const bookRouter = () => {
 	 *        "200":
 	 *           description: Updated successfully. Book is not available.
 	 *        "400":
-	 *           description: Bad request.
-	 *        "422":
-	 *           description: Missing/Incorrect input. Received no properties to update.
+	 *           description: Bad request. Missing/Incorrect input. Received no properties to update.
 	 *        "500":
 	 *           description: Unable to process the request.
 	 */
@@ -159,9 +155,7 @@ export const bookRouter = () => {
 	 *        "200":
 	 *           description: Deleted the book successfully. Book is not available.
 	 *        "400":
-	 *           description: Bad request.
-	 *        "422":
-	 *           description: Invalid input. Missing/Incorrect input.
+	 *           description: Bad request. Invalid input. Missing/Incorrect input.
 	 *        "500":
 	 *           description: Unable to process the request.
 	 */

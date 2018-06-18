@@ -14,6 +14,7 @@ export const requestHandler = async (req, res, requestHandlerFunction) => {
 		logger.error(error);
 
 		result.status = 400;
+
 		result.result = 'Unable to process your request.';
 
 		if (error) {
@@ -25,9 +26,13 @@ export const requestHandler = async (req, res, requestHandlerFunction) => {
 	let jsonToReturn = {};
 
 	if (result.json) {
-		jsonToReturn = result.json;
+
+		jsonToReturn.result = 'Your request has been processed successfully.';
+		jsonToReturn.data = result.json;
+
 	}
 	else {
+
 		jsonToReturn = {
 			result: result.result,
 		};
@@ -36,7 +41,9 @@ export const requestHandler = async (req, res, requestHandlerFunction) => {
 			jsonToReturn.error = result.error.toString();
 		}
 	}
+
 	logger.info(JSON.stringify(jsonToReturn));
+
 	res.status(result.status).json(jsonToReturn);
 
 };

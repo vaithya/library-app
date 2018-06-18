@@ -221,7 +221,7 @@ class Book {
 		else {
 			return {
 				status: HttpStatus.BAD_REQUEST,
-				result: 'Received no properties to update.',
+				result: 'Received no valid properties to update.',
 			};
 		}
 
