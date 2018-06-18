@@ -23,7 +23,7 @@ class Member {
 
 		if (validationError) {
 			return {
-				status: HttpStatus.UNPROCESSABLE_ENTITY,
+				status: HttpStatus.BAD_REQUEST,
 				result: 'Invalid input.',
 				error: validationError,
 			};
@@ -40,7 +40,7 @@ class Member {
 
 			if (existingMember) {
 				return {
-					status: HttpStatus.OK,
+					status: HttpStatus.BAD_REQUEST,
 					result: 'The requested user is already a registered member.',
 				};
 			}
@@ -91,7 +91,7 @@ class Member {
 
 			if (existingMember.unRegisteredYN) {
 				return {
-					status: HttpStatus.OK,
+					status: HttpStatus.BAD_REQUEST,
 					result: 'This user has already unregistered with us.',
 				};
 			}

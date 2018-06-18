@@ -65,7 +65,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 			shelfNumber: '5',
 			publishedDate: '2018-12-02',
 		})
-		.expect(422)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Name of the book cannot be empty, should be a string/);
 		});
@@ -78,7 +78,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 			shelfNumber: '5',
 			publishedDate: '2018-12-02',
 		})
-		.expect(422)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Name of the book cannot be empty, should be a string, has to contain between 6 and 20 characters and it cannot contain special characters. Author of the book cannot be empty and it should be a string. /);
 			expect(res.body.error).toMatch(/Author of the book cannot be empty and it should be a string. /);
@@ -93,7 +93,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 			shelfNumber: '5',
 			publishedDate: '2018-12-02',
 		})
-		.expect(422)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Name of the book has to contain between 6 and 20 characters and it cannot contain special characters. /);
 			expect(res.body.error).toMatch(/Author of the book cannot be empty and it should be a string. /);
@@ -105,7 +105,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 			name: 'new book',
 			author: 'abc',
 		})
-		.expect(422)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Shelf number of the book cannot be empty and it should be a string. /);
 		});
@@ -118,7 +118,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 			shelfNumber: 5,
 			publishedDate: '2018-12-02',
 		})
-		.expect(422)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Shelf number of the book cannot be empty and it should be a string. /);
 			expect(res.body.error).toMatch(/Edition number of the book is not valid. It has to be a number. /);
@@ -132,7 +132,7 @@ test('Add a book to the library, Book parameters validation', async (done) => {
 			edition: '5',
 			publishedDate: '2018-12',
 		})
-		.expect(422)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Published date of the book is not valid. /);
 		});
@@ -163,7 +163,7 @@ test('Get book APIs', async () => {
 
 	await request(app)
 		.get(`/api/books/9999`)
-		.expect(200)
+		.expect(404)
 		.expect((res) => {
 			expect(res.body.result).toMatch(/The requested book is not available now./);
 		});
@@ -194,7 +194,7 @@ test('Update book properties API', async () => {
 	await request(app)
 		.patch(`/api/books/${bookToUpdate.id}`)
 		.send({})
-		.expect(422);
+		.expect(400);
 
 	await request(app)
 		.patch(`/api/books/${bookToUpdate.id}`)
@@ -234,7 +234,7 @@ test('Update book properties API', async () => {
 		.send({
 			edition: '2',
 		})
-		.expect(200)
+		.expect(404)
 		.expect((res) => {
 			expect(res.body.result).toMatch(/The requested book is not available to be updated./);
 		});
@@ -258,7 +258,7 @@ test('Delete a book', async () => {
 
 	await request(app)
 		.delete(`/api/books/0000`)
-		.expect(200)
+		.expect(404)
 		.expect((res) => {
 			expect(res.body.result).toMatch(/The requested book is not available to be deleted./);
 		});

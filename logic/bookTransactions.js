@@ -80,7 +80,7 @@ class BookTransactions {
 			}
 			else if (bookAvailability === false) {
 				return {
-					status: HttpStatus.OK,
+					status: HttpStatus.NOT_FOUND,
 					result: 'This book is not available at the moment.',
 				};
 			}
@@ -123,14 +123,14 @@ class BookTransactions {
 
 			if (!book) {
 				return {
-					status: HttpStatus.OK,
+					status: HttpStatus.BAD_REQUEST,
 					result: 'We did not lend you this book. Please check.',
 				};
 			}
 
 			if (existingMember.noOfBooksTaken === 0) {
 				return {
-					status: HttpStatus.OK,
+					status: HttpStatus.BAD_REQUEST,
 					result: 'You\'ve returned all your books already. Please check.',
 				};
 			}
@@ -202,7 +202,7 @@ class BookTransactions {
 		else {
 
 			return {
-				status: HttpStatus.UNPROCESSABLE_ENTITY,
+				status: HttpStatus.BAD_REQUEST,
 				result: 'Missing or invalid transaction type. Specify either BORROW or RETURN as type. Should be a string.',
 			};
 

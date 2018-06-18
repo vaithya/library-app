@@ -31,7 +31,7 @@ class Book {
 
 		if (validationError) {
 			return {
-				status: HttpStatus.UNPROCESSABLE_ENTITY,
+				status: HttpStatus.BAD_REQUEST,
 				result: 'Invalid input.',
 				error: validationError,
 			};
@@ -133,7 +133,7 @@ class Book {
 
 			if (!book) {
 				return {
-					status: HttpStatus.OK,
+					status: HttpStatus.NOT_FOUND,
 					result: 'The requested book is not available now.',
 				};
 			}
@@ -212,7 +212,7 @@ class Book {
 
 			if (validationError) {
 				return {
-					status: HttpStatus.UNPROCESSABLE_ENTITY,
+					status: HttpStatus.BAD_REQUEST,
 					result: 'Invalid input.',
 					error: validationError,
 				};
@@ -220,7 +220,7 @@ class Book {
 		}
 		else {
 			return {
-				status: HttpStatus.UNPROCESSABLE_ENTITY,
+				status: HttpStatus.BAD_REQUEST,
 				result: 'Received no properties to update.',
 			};
 		}
@@ -237,7 +237,7 @@ class Book {
 
 			if (!existingBook) {
 				return {
-					status: HttpStatus.OK,
+					status: HttpStatus.NOT_FOUND,
 					result: 'The requested book is not available to be updated.',
 				};
 			}
@@ -282,7 +282,7 @@ class Book {
 
 			if (!existingBook) {
 				return {
-					status: HttpStatus.OK,
+					status: HttpStatus.NOT_FOUND,
 					result: 'The requested book is not available to be deleted.',
 				};
 			}

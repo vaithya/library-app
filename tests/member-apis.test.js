@@ -37,7 +37,7 @@ test('Register a member', async () => {
 	await request(app)
 		.post('/api/members')
 		.send({})
-		.expect(422)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Username cannot be empty and it should be a string, should be between 6-12 characters\/digits. Cannot contain special characters. /);
 		});
@@ -47,7 +47,7 @@ test('Register a member', async () => {
 		.send({
 			username: 123,
 		})
-		.expect(422)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Username cannot be empty and it should be a string, should be between 6-12 characters\/digits. Cannot contain special characters. /);
 		});
@@ -57,7 +57,7 @@ test('Register a member', async () => {
 		.send({
 			username: '',
 		})
-		.expect(422)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Username cannot be empty and it should be a string, should be between 6-12 characters\/digits. Cannot contain special characters. /);
 		});
@@ -67,7 +67,7 @@ test('Register a member', async () => {
 		.send({
 			username: 'abc',
 		})
-		.expect(422)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Username should be between 6-12 characters\/digits. Cannot contain special characters. /);
 		});
@@ -78,7 +78,7 @@ test('Register a member', async () => {
 			username: 'abcdef',
 			contactNumber: 123,
 		})
-		.expect(422)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Contact number should be a string. /);
 		});
@@ -89,7 +89,7 @@ test('Register a member', async () => {
 			username: 'abcdef',
 			contactNumber: '123a',
 		})
-		.expect(422)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.error).toMatch(/Contact number can contain only numbers. /);
 		});
@@ -100,7 +100,7 @@ test('Register a member', async () => {
 			username: 'abcdef',
 			contactNumber: '123',
 		})
-		.expect(200)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.result).toMatch(/The requested user is already a registered member./);
 		});
@@ -144,7 +144,7 @@ test('Unregister a member', async () => {
 
 	await request(app)
 		.delete(`/api/members/${deletedMember.id}`)
-		.expect(200)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.result).toMatch(/This user has already unregistered with us./);
 		});

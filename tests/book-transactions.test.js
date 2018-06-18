@@ -35,7 +35,7 @@ test('Borrow and return a book', async () => {
 	await request(app)
 		.post(`/api/members/${exampleMember.id}/books/${exampleBook.id}`)
 		.send({})
-		.expect(422);
+		.expect(400);
 
 	await request(app)
 		.post(`/api/members/${exampleMember.id}/books/${exampleBook.id}`)
@@ -55,7 +55,7 @@ test('Borrow and return a book', async () => {
 		.send({
 			transactionType: 'BORROW',
 		})
-		.expect(200)
+		.expect(404)
 		.expect((res) => {
 			expect(res.body.result).toMatch(/This book is not available at the moment./);
 		});
@@ -88,7 +88,7 @@ test('Borrow and return a book', async () => {
 		.send({
 			transactionType: 'RETURN',
 		})
-		.expect(200)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.result).toMatch(/You\'ve returned all your books already. Please check./);
 		});
@@ -108,7 +108,7 @@ test('Borrow and return a book', async () => {
 		.send({
 			transactionType: 'RETURN',
 		})
-		.expect(200)
+		.expect(400)
 		.expect((res) => {
 			expect(res.body.result).toMatch(/We did not lend you this book. Please check./);
 		});
