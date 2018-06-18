@@ -22,14 +22,14 @@ To build a book management application with APIs to achieve the following:
 
 Libraries & Frameworks Used:
 
-1.  Express.js 	-  A web framework for Node.js used to assign handlers for requests, define routes, add middlewares etc.
+1.  Express.js 	-  A web framework for Node.js used to assign handlers for requests, define routes & add middlewares.
 2.  Sequelize  	-  A promise based ORM for postgres database. Wrapper around postgres operations.
 3.  Validator   -  A library of string validators.
 4.  Jest        -  Unit testing framework.
 5.  Istanbul   	-  A tool used to find the code coverage of our application. 
 6.  Eslint     	-  A tool for reporting and fixing styling, errors and enforcing coding standards.
 7.  Webpack    	-  A module bundler
-8.  Babel      	-  A java script transpiler that converts ES6 and above into ES5 java script that can run in any browser.
+8.  Babel      	-  A java script transpiler that converts ES6 and above into ES5 that can run in any browser.
 9.  Supertest  	-  A library for testing http servers.
 11. Http-status-codes -  A library of constants that provide a user-readable way of returning status codes.
 12. Swagger    	-  API documentation
@@ -107,9 +107,6 @@ All files                       |    91.55 |    82.87 |    91.45 |    98.67 |   
 --------------------------------|----------|----------|----------|----------|-------------------|
 
 
-
-My Confluence Page: 
-
-https://athenaconfluence.athenahealth.com/display/~nvaithyanathan/Technical+Upskilling
+<a href="https://athenaconfluence.athenahealth.com/display/~nvaithyanathan/Technical+Upskilling">My Confluence Page</a>
 
 </pre>
