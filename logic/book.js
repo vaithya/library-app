@@ -20,22 +20,8 @@ class Book {
 		const bookToAdd = req.body;
 		let createdBook;
 		let existingBook;
-		let validationError;
 
-		try {
-			validationError = validateBook(bookToAdd, { operation: 'add' });
-		}
-		catch (error) {
-			throw Error(error);
-		}
-
-		if (validationError) {
-			return {
-				status: HttpStatus.BAD_REQUEST,
-				result: 'Invalid input.',
-				error: validationError,
-			};
-		}
+		validateBook(bookToAdd, { operation: 'add' });
 
 		const { name, author, edition } = bookToAdd;
 
@@ -192,7 +178,6 @@ class Book {
 	async updateBook (req) {
 
 		const propertiesToUpdate = {};
-		let validationError;
 
 		for (const key of Object.keys(req.body)) {
 			if (bookProperties[key]) {
@@ -203,20 +188,7 @@ class Book {
 		const propertyKeys = Object.keys(propertiesToUpdate);
 
 		if (propertyKeys.length > 0) {
-			try {
-				validationError = validateBook(propertiesToUpdate, { operation: 'update' });
-			}
-			catch (error) {
-				throw Error(error);
-			}
-
-			if (validationError) {
-				return {
-					status: HttpStatus.BAD_REQUEST,
-					result: 'Invalid input.',
-					error: validationError,
-				};
-			}
+			validateBook(propertiesToUpdate, { operation: 'update' });
 		}
 		else {
 			return {

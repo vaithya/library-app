@@ -1,4 +1,5 @@
 import logger from '../logger.js';
+import HttpStatus from 'http-status-codes';
 
 export const requestHandler = async (req, res, requestHandlerFunction) => {
 
@@ -13,7 +14,7 @@ export const requestHandler = async (req, res, requestHandlerFunction) => {
 
 		logger.error(error);
 
-		result.status = 400;
+		result.status = HttpStatus.BAD_REQUEST;
 
 		result.result = 'Unable to process your request.';
 
@@ -39,6 +40,7 @@ export const requestHandler = async (req, res, requestHandlerFunction) => {
 
 		if (result.error) {
 			jsonToReturn.error = result.error.toString();
+			jsonToReturn.data = {};
 		}
 	}
 

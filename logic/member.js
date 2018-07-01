@@ -12,22 +12,8 @@ class Member {
 		const { username = '', contactNumber = '' } = req.body;
 
 		let existingMember;
-		let validationError;
 
-		try {
-			validationError = validateMember({ username, contactNumber });
-		}
-		catch (error) {
-			throw Error(error);
-		}
-
-		if (validationError) {
-			return {
-				status: HttpStatus.BAD_REQUEST,
-				result: 'Invalid input.',
-				error: validationError,
-			};
-		}
+		validateMember({ username, contactNumber });
 
 		try {
 
